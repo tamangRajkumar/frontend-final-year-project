@@ -21,9 +21,9 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-12 px-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-200 shadow-sm animate-fadeIn">
+    <footer className="w-full mt-16 bg-gradient-to-r from-white to-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
+        <div className="py-12 px-6 rounded-3xl bg-white/70 backdrop-blur-sm border border-gray-200 shadow-sm animate-fadeIn">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* About */}
             <div>
