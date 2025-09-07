@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import DropdownMobileView from "../dropdown/MobileView/DropdownMobileView";
 import type { NextPage } from "next";
 
-import { HiOutlineX, HiOutlineMenu, HiPlus, HiBell } from "react-icons/hi";
+import { HiOutlineX, HiOutlineMenu, HiPlus, HiBell, HiSearch } from "react-icons/hi";
 import Link from "next/link";
 import ProfileDropdown from "../dropdown/DropdownProfile/ProfileDropdown";
 import { HiHeart } from "react-icons/hi";
