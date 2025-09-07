@@ -204,18 +204,20 @@ const Navbar: NextPage = () => {
               {authUser && (
                 <>
                   {/* Favorite Lists */}
-                  <div className="hidden lg:block mx-4">
+                  <div className="hidden lg:block mx-3">
                     <Link href="/favorite_posts">
-                      <HiHeart className="h-8 w-8 text-red-600 cursor-pointer " />
+                      <HiHeart className="h-7 w-7 text-red-600 cursor-pointer transition hover:scale-105" />
                     </Link>
                   </div>
 
                   {/* Add new Post button icon  */}
                   <div
                     onClick={handlePostModal}
-                    className="bg-white cursor-pointer  ml-1 shadow-md p-1 rounded-lg hidden lg:block"
+                    className="ml-1 hidden lg:block"
                   >
-                    <HiPlus className="h-6  w-6 text-gray-900" />
+                    <div className="p-2 rounded-lg bg-white/70 border border-gray-200 shadow hover:shadow-lg transition cursor-pointer">
+                      <HiPlus className="h-5 w-5 text-gray-900" />
+                    </div>
                   </div>
 
                   {/* Post Modal Show Hide */}
@@ -233,17 +235,24 @@ const Navbar: NextPage = () => {
                 {/* View Notifications   */}
                 {authUser && (
                   <>
-                    <button
-                      type="button"
-                      className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
-                      {/* View notifications bell  */}
-                      <HiBell
-                        className="h-6 w-6 p-0.5 "
-                        fill="none"
-                        strokeWidth="1.5"
-                      ></HiBell>
-                    </button>
+                    <div className="relative mr-3">
+                      <button
+                        type="button"
+                        className="rounded-full bg-white/80 p-1 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                      >
+                        {/* View notifications bell  */}
+                        <HiBell
+                          className="h-6 w-6 p-0.5 "
+                          fill="none"
+                          strokeWidth="1.5"
+                        />
+                      </button>
+                      {/* notification count badge */}
+                      <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white rounded-full"
+                        style={{ background: brand }}>
+                        3
+                      </span>
+                    </div>
                   </>
                 )}
                 {/* Profile dropdown */}
