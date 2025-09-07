@@ -12,6 +12,7 @@ import { signupSchema, SignupFormData } from "../../src/validation/schemas";
 import AnimatedAuthBg from "../../src/components/common/AnimatedAuthBg";
 import SocialButtons from "../../src/components/auth/SocialButtons";
 import Logo from "../../src/components/headerFooter/Logo";
+import FileUpload from "../../src/components/common/FileUpload";
 
 const Signup: NextPage = () => {
   const [countries, setCountries] = useState<any[]>([]);
