@@ -167,30 +167,37 @@ const Navbar: NextPage = () => {
 
               {/* Web View Nav Links */}
               <div className="hidden sm:ml-6 sm:block">
-                <div className="flex space-x-4">
-                  {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-
+                <div className="flex items-center space-x-4">
                   {navMenuItems.map((item) => (
-                    <div key={item.name}>
+                    <div key={item.name} className="relative">
                       <Link href={item.link}>
                         <a
                           className={
                             router.pathname == item.link
-                              ? "bg-gray-900 text-white px-3 py-2 rounded-lg text-base font-medium shadow-sm"
-                              : "text-gray-900 hover:bg-gray-900 hover:text-white hover:shadow-sm px-3 py-2 rounded-lg text-base font-medium shadow-sm ease-in-out duration-150"
+                              ? "text-gray-900 px-3 py-2 rounded-md text-base font-medium"
+                              : "text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium transition"
                           }
                         >
                           {item.name}
                         </a>
                       </Link>
+                      {router.pathname == item.link && (
+                        <span className="absolute left-1/2 -bottom-1 transform -translate-x-1/2 h-1 w-10 rounded-full"
+                          style={{ background: `linear-gradient(90deg, ${brand}, #ff8f57)` }} />
+                      )}
                     </div>
                   ))}
 
-                  {/* <Link href="explore_places">
-                    <a className="text-gray-900 hover:bg-gray-900 hover:text-white hover:shadow-sm px-3 py-2 rounded-lg text-md font-medium shadow-sm ">
-                      Explore Places
-                    </a>
-                  </Link> */}
+                  {/* Minimal search */}
+                  <div className="ml-3 flex items-center">
+                    <div className="relative">
+                      <input
+                        placeholder="Search"
+                        className="hidden md:block w-48 pl-3 pr-8 py-1 rounded-full border border-gray-200 bg-white/80 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
+                      />
+                      <HiSearch className="absolute right-1 top-1.5 h-5 w-5 text-gray-500" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
