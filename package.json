@@ -23,8 +23,11 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
-    "socket.io-client": "^4.8.1"
-  },
+    "socket.io-client": "^4.8.1",
+    "react-hook-form": "^7.43.1",
+    "@hookform/resolvers": "^2.9.10",
+    "zod": "^3.21.4"
+    },
   "devDependencies": {
     "@types/node": "18.7.16",
     "@types/react": "18.0.18",
