@@ -87,7 +87,7 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          <div className="relative mt-12 mx-auto max-w-5xl bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-4 sm:p-6 shadow-2xl">
+          <div className="relative mt-12 mx-auto max-w-5xl bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-4 sm:p-6 shadow-2xl">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-gray-600">
               <div className="rounded-2xl bg-white/5 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>10k+</div>
@@ -122,7 +122,7 @@ const Home: NextPage = () => {
               <Carousel>
                 {featuredContent.featuredProposals.map((proposal) => (
                   <div key={proposal._id} className="h-full">
-                    <div className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-xl h-full">
+                    <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-6 shadow-xl h-full">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="h-12 w-12 rounded-full bg-white/20 overflow-hidden flex items-center justify-center">
                           {proposal.postedBy?.userProfileImage?.url ? (
@@ -161,7 +161,7 @@ const Home: NextPage = () => {
               <Carousel>
                 {featuredContent.featuredBusinesses.map((biz) => (
                   <div key={biz._id} className="h-full">
-                    <div className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-xl h-full text-center">
+                    <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-6 shadow-xl h-full text-center">
                       <div className="mx-auto h-16 w-16 rounded-full bg-white/60 overflow-hidden mb-4">
                         {biz.userProfileImage?.url ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -190,7 +190,7 @@ const Home: NextPage = () => {
               <Carousel>
                 {featuredContent.featuredEvents.map((evt) => (
                   <div key={evt._id} className="h-full">
-                    <div className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl overflow-hidden shadow-xl h-full">
+                    <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl overflow-hidden shadow-xl h-full">
                       {evt.image?.url && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={evt.image.url} alt={evt.title} className="w-full h-48 object-cover" />
@@ -223,7 +223,7 @@ const Home: NextPage = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {featuredContent.featuredProposals.slice(0, 6).map((p) => (
-                  <div key={p._id} className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition">
+                  <div key={p._id} className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition">
                     <h3 className="text-lg font-semibold mb-2">{p.title}</h3>
                     <p className="text-sm text-zinc-300 line-clamp-3 mb-4">{p.description}</p>
                     <Link href={`/proposals/${p._id}`}>
@@ -242,7 +242,7 @@ const Home: NextPage = () => {
             <h2 className="text-2xl font-bold mb-6 text-center">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {["Post Proposal", "Connect", "Match", "Build Together"].map((step, idx) => (
-                <div key={step} className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 text-center shadow-xl hover:-translate-y-0.5 transition transform">
+                <div key={step} className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-6 text-center shadow-xl hover:-translate-y-0.5 transition transform">
                   <div className="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-3"
                        style={{ background: `linear-gradient(135deg, ${brand}, #ff8f57)` }}>
                     <span className="font-bold">{idx + 1}</span>
@@ -274,7 +274,7 @@ const Home: NextPage = () => {
                 role: "CTO, HealthTech"
               }].map((t) => (
                 <div key={t.id} className="h-full">
-                  <div className="bg-white/60 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-xl h-full">
+                  <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-6 shadow-xl h-full">
                     <p className="text-lg">“{t.text}”</p>
                     <div className="mt-4 text-sm text-zinc-300">{t.name} · {t.role}</div>
                   </div>
@@ -297,7 +297,7 @@ const Home: NextPage = () => {
                 q: "How do you keep the community safe?",
                 a: "Profiles and proposals are moderated. You can report issues, and we verify profiles and activity for quality."
               }].map((item, i) => (
-                <details key={i} className="group bg-white/60 backdrop-blur-xl border border-gray-200 rounded-2xl p-4">
+                <details key={i} className="group bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-4">
                   <summary className="cursor-pointer list-none flex items-center justify-between font-medium">
                     <span>{item.q}</span>
                     <HiCheckCircle className="h-5 w-5 opacity-60 group-open:rotate-45 transition" />
@@ -309,7 +309,7 @@ const Home: NextPage = () => {
           </section>
 
           {/* Newsletter */}
-          <section className="bg-white/5 backdrop-blur-xl border border-gray-200 rounded-3xl p-6">
+          <section className="bg-white/5 backdrop-blur-sm border border-gray-200 rounded-3xl p-6">
             <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="flex-1">
                 <h3 className="text-xl font-semibold">Stay in the loop</h3>
@@ -328,7 +328,7 @@ const Home: NextPage = () => {
 
           {/* CTA Banner */}
           <section>
-            <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 border border-gray-200 bg-white/60 backdrop-blur-xl text-center">
+            <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 border border-gray-200 bg-white/60 backdrop-blur-sm text-center">
               <h2 className="text-3xl font-extrabold mb-3">Ready to build together?</h2>
               <p className="text-zinc-300 mb-6">Post your proposal or join an existing team today.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
