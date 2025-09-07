@@ -62,7 +62,7 @@ const Home: NextPage = () => {
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="relative z-10 text-center">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/10 backdrop-blur-md border border-white/20">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/60 backdrop-blur-sm border border-gray-200 text-gray-900">
               <HiSparkles className="h-4 w-4 text-white" /> LinkCofounders
             </span>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent"
