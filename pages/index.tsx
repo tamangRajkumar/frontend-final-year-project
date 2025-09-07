@@ -340,7 +340,6 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      {/* Footer stays as existing component */}
     </div>
   );
 };
