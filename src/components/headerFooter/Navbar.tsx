@@ -260,7 +260,7 @@ const Navbar: NextPage = () => {
                   <div>
                     <button
                       ref={profileDropdownBtnRef}
-                      className="flex ml-2 rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      className="flex ml-2 rounded-full bg-white/80 p-1.5 text-sm focus:outline-none border border-gray-200 shadow hover:shadow-lg transition"
                       id="user-menu-button"
                       aria-expanded="false"
                       aria-haspopup="true"
@@ -269,15 +269,15 @@ const Navbar: NextPage = () => {
                       {profileUrl ? (
                         <>
                          <img
-                            className="h-9 w-9 rounded-full"
+                            className="h-9 w-9 rounded-full object-cover"
                             src={profileUrl}
                             alt=""
-                          />  
+                          />
                         </>
                       ) : (
                         <>
                           <img
-                            className="h-10  w-10 rounded-full shadow-md"
+                            className="h-9 w-9 rounded-full shadow-md object-cover"
                             src="https://res.cloudinary.com/dltfhwsui/image/upload/v1665376261/Avatar_nvh0hb.png"
                             alt=""
                           />
