@@ -5,6 +5,7 @@ import type { NextPage } from "next";
 import { HiOutlineX, HiOutlineMenu, HiPlus, HiBell, HiSearch } from "react-icons/hi";
 import Link from "next/link";
 import ProfileDropdown from "../dropdown/DropdownProfile/ProfileDropdown";
+import Logo from "./Logo";
 import { HiHeart } from "react-icons/hi";
 import { useRouter } from "next/router";
 import PostModalDashboard from "../Modal/PostModalDashboard";
