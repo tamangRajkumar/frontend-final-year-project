@@ -134,7 +134,7 @@ const Home: NextPage = () => {
                         </div>
                         <div>
                           <div className="font-semibold">{proposal.postedBy?.businessInfo?.businessName || `${proposal.postedBy?.fname} ${proposal.postedBy?.lname}`}</div>
-                          <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-white/60 border border-gray-200"><HiStar className="h-4 w-4 mr-1" /> Featured</span>
+                          <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-white/20 border border-gray-200 text-gray-700"><HiStar className="h-4 w-4 mr-1" /> Featured</span>
                         </div>
                       </div>
                       <h3 className="text-xl font-semibold mb-2">{proposal.title}</h3>
