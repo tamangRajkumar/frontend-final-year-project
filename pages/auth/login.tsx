@@ -74,8 +74,8 @@ const Login: NextPage = () => {
           {/* Right - Card */}
           <div className="relative bg-white/80 backdrop-blur-sm border border-gray-200 rounded-3xl p-8 shadow-lg transition-transform transform hover:-translate-y-1">
             <div className="text-center mb-4">
-              <div className="mx-auto w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-300 text-white text-2xl font-extrabold shadow-xl animate-fadeIn">
-                LC
+              <div className="mx-auto w-20 h-20">
+                <Logo size={64} />
               </div>
               <h2 className="mt-4 text-xl font-bold text-gray-900">Log in to LinkCofounders</h2>
               <p className="text-sm text-gray-600">Fast. Secure. Tailored for founders.</p>
