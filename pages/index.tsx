@@ -49,7 +49,7 @@ const Home: NextPage = () => {
   const brand = "#f26722";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-900">
       {/* Decorative animated blobs */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full blur-3xl opacity-30 animate-pulse"
