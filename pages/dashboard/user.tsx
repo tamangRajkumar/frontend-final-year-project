@@ -7,16 +7,19 @@ import SidebarProfileSection from "../../src/components/dashboard/user/SidebarPr
 import { HiOutlineCamera, HiPlus } from "react-icons/hi";
 import PostCard from "../../src/components/cards/PostCard";
 import PostModalDashboard from "../../src/components/Modal/PostModalDashboard";
+import CreatePostModal from "../../src/components/posts/CreatePostModal";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { fetchPosts, postLiked, postUnliked } from "../api";
 import { toast } from "react-toastify";
 
-const user: NextPage = () => {
+const User: NextPage = () => {
   const [postModal, setPostModal] = useState(false);
+  const [createPostModal, setCreatePostModal] = useState(false);
   const [userData, setUserData] = useState();
   const [authUserCheck, setAuthUserCheck] = useState();
   const [userPosts, setUserPosts] = useState();
+  const [isClient, setIsClient] = useState(false);
 
   const router = useRouter();
 
@@ -24,12 +27,45 @@ const user: NextPage = () => {
     setPostModal(true);
   };
 
+  const handleCreatePostModal = () => {
+    setCreatePostModal(true);
+  };
+
+  // Fix hydration issue by ensuring client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   //check whether the user is logged in or not if logged in and isAuthenticated is true then redirect to dashboard
   const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
   console.log(authUser);
   const token = useSelector((state: any) => state.authUser.token);
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
-  // console.log(authUser);
+  
+  // Redirect based on user role
+  useEffect(() => {
+    if (isClient && currentUser && authUser) {
+      const userRole = currentUser.role;
+      switch (userRole) {
+        case "admin":
+          router.push("/dashboard/admin");
+          break;
+        case "business":
+          router.push("/dashboard/business");
+          break;
+        case "user":
+        default:
+          // Stay on user dashboard
+          break;
+      }
+    }
+  }, [currentUser, authUser, router, isClient]);
+  
+  // Prevent hydration mismatch by not rendering until client-side
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
+
   if (authUserCheck == false) {
     router.push("/auth/login");
   }
@@ -120,19 +156,28 @@ const user: NextPage = () => {
               </div>
 
               {/* Add New Post Button */}
-
-              <div
-                className="mt-8 flex justify-center items-center "
-                onClick={handlePostModal}
-              >
-                <input
-                  type="text"
-                  className="bg-white shadow-md cursor-pointer focus:outline-none  rounded-2xl pl-5 py-1.5 text-gray-900 font-base"
-                  placeholder="Add New Post"
-                />
-                <div className="bg-white shadow-lg  ml-3 rounded-md p-[0.5px] cursor-pointer">
-                  <HiPlus className="h-6 w-6 " />
+              <div className="mt-8 flex justify-center items-center space-x-4">
+                <div
+                  className="flex justify-center items-center cursor-pointer"
+                  onClick={handlePostModal}
+                >
+                  <input
+                    type="text"
+                    className="bg-white shadow-md cursor-pointer focus:outline-none  rounded-2xl pl-5 py-1.5 text-gray-900 font-base"
+                    placeholder="Add New Post (Legacy)"
+                  />
+                  <div className="bg-white shadow-lg  ml-3 rounded-md p-[0.5px] cursor-pointer">
+                    <HiPlus className="h-6 w-6 " />
+                  </div>
                 </div>
+                
+                <button
+                  onClick={handleCreatePostModal}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                >
+                  <HiPlus className="h-5 w-5" />
+                  <span>Create Post</span>
+                </button>
               </div>
 
               {/* Post Modal Show Hide */}
@@ -142,6 +187,15 @@ const user: NextPage = () => {
                   editPost={false}
                   setPostModal={setPostModal}
                   getUserPosts={getUserPosts}
+                />
+              )}
+
+              {/* Create Post Modal */}
+              {createPostModal && (
+                <CreatePostModal
+                  isOpen={createPostModal}
+                  onClose={() => setCreatePostModal(false)}
+                  onPostCreated={getUserPosts}
                 />
               )}
 
@@ -166,4 +220,4 @@ const user: NextPage = () => {
   );
 };
 
-export default user;
+export default User;

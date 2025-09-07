@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../src/components/headerFooter/Navbar";
 import Footer from "../src/components/headerFooter/Footer";
+import { SocketProvider } from "../src/contexts/SocketContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   //axios configuration
@@ -18,13 +19,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Provider store={store}>
-        <div className="bg-gray-50">
-          <Navbar />
-          <Component {...pageProps} />
-          <ToastContainer position="bottom-right" />
-        
-          < Footer />
-        </div>
+        <SocketProvider>
+          <div className="bg-gray-50">
+            <Navbar />
+            <Component {...pageProps} />
+            <ToastContainer position="bottom-right" />
+          
+            < Footer />
+          </div>
+        </SocketProvider>
       </Provider>
     </>
   );

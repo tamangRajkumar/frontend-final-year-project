@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from '../../src/components/find_user/Card'
 
-const index = () => {
+const OnlineUsers = () => {
   return (
   <div>
     <p className='text-2xl font-bold text-center mt-10 mb-5 text-green-600'>Online Users</p>
@@ -14,4 +14,4 @@ const index = () => {
   )
 }
 
-export default index
+export default OnlineUsers

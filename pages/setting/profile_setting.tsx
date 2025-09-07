@@ -1,7 +1,7 @@
 import React from "react";
 import SidebarSettingOptions from "../../src/components/setting/SidebarSettingOptions";
 
-const profile_setting = () => {
+const ProfileSetting = () => {
   return (
     <div className="flex   px-20  h-[100vh] bg-white">
       {/* Sidebar Setting Options */}
@@ -54,4 +54,4 @@ const profile_setting = () => {
   );
 };
 
-export default profile_setting;
+export default ProfileSetting;

@@ -16,7 +16,7 @@ import OptionsDropdown from "../../../src/components/dropdown/PostEditOptions/Op
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-const index: NextPage = () => {
+const IndividualPost: NextPage = () => {
   const router = useRouter();
   const postOptionsButtonRef = useRef(null);
 
@@ -219,4 +219,4 @@ const index: NextPage = () => {
   );
 };
 
-export default index;
+export default IndividualPost;

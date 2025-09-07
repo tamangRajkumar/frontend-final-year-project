@@ -1,7 +1,7 @@
 import React from "react";
 import UserPosts from "../../src/components/dashboard/user/UserPosts";
 
-const index = () => {
+const FavoritePosts = () => {
   return (
     <>
       <div className="mt-10">
@@ -15,4 +15,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default FavoritePosts;

@@ -1,7 +1,7 @@
 import React from "react";
 import SidebarSettingOptions from "../../src/components/setting/SidebarSettingOptions";
 
-const security_and_password = () => {
+const SecurityAndPassword = () => {
   return (
     <div className="flex   px-20 h-[100vh] bg-white">
       {/* Sidebar Setting Options */}
@@ -35,4 +35,4 @@ const security_and_password = () => {
   );
 };
 
-export default security_and_password;
+export default SecurityAndPassword;

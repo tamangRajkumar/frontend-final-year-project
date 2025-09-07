@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Image1, Profile } from "../../src/assets";
 import Card from "../../src/components/find_user/Card";
 import { fetchAllUsers } from "../api";
-const find_users = () => {
+const FindUsers = () => {
 
     const[users, setUsers] = useState();
  users && console.log(users)
@@ -28,4 +28,4 @@ const find_users = () => {
   );
 };
 
-export default find_users;
+export default FindUsers;

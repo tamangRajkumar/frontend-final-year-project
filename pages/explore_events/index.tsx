@@ -1,9 +1,9 @@
 import React from 'react'
 
-const index = () => {
+const ExploreEvents = () => {
   return (
     <div>Explore Places</div>
   )
 }
 
-export default index
+export default ExploreEvents

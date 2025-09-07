@@ -74,30 +74,22 @@ const Navbar: NextPage = () => {
       name: "Home",
       link: "/",
     },
-    // {
-    //   name: "Confessions",
-    //   link: "/confessions",
-    // },
-    // {
-    //   name: "IT Memes",
-    //   link: "/it_memes",
-    // },
-    // {
-    //   name: "Assignment confusions",
-    //   link: "/assignment_confusions",
-    // },
-    // {
-    //   name: "Job/ Intern news",
-    //   link: "/job_intern_news",
-    // },
-    // {
-    //   name: "Alumni talks",
-    //   link: "/alumni_talks",
-    // },
-    // {
-    //   name: "Sunway Reviews",
-    //   link: "/sunway_reviews",
-    // },
+    {
+      name: "Posts",
+      link: "/posts",
+    },
+    {
+      name: "Proposals",
+      link: "/proposals",
+    },
+    {
+      name: "Events",
+      link: "/events",
+    },
+    {
+      name: "Chat",
+      link: "/chat",
+    },
     {
       name: "Explore Events",
       link: "/explore_events",
@@ -106,10 +98,6 @@ const Navbar: NextPage = () => {
       name: "Find Users",
       link: "/find_users",
     },
-    // {
-    //   name: "Online Users",
-    //   link: "/online_users",
-    // },
   ];
 
   return (

@@ -34,13 +34,30 @@ export const logInUser =
           // Create local storage for favorite Posts List
           window.localStorage.setItem("favoritePostsList", JSON.stringify([]));
 
-          router.push("/dashboard/user");
-          toast.success("Welcome, You have logged in successfully.");
+          // Route based on user role
+          const userRole = data.user.role;
+          let dashboardRoute = "/dashboard/user";
+          
+          switch (userRole) {
+            case "admin":
+              dashboardRoute = "/dashboard/admin";
+              break;
+            case "business":
+              dashboardRoute = "/dashboard/business";
+              break;
+            case "user":
+            default:
+              dashboardRoute = "/dashboard/user";
+              break;
+          }
+
+          router.push(dashboardRoute);
+          toast.success(`Welcome, You have logged in successfully as ${userRole}.`);
         }
       }
     } catch (error) {
       console.log("ERROR=> ", error);
-      toast.error("Log in Error, Please try again to log in!");
+      toast.error(error?.response?.data);
     }
   };
 
