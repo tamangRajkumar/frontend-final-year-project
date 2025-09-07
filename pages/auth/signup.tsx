@@ -171,9 +171,14 @@ const Signup: NextPage = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-sm text-gray-700">KYC Document (optional)</label>
-              <input type="file" {...register("kycDocumentImage")} accept=".jpg,.jpeg,.png" className="mt-1 w-full" />
-              <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file</p>
+              {/* KYC upload using modern FileUpload component */}
+              <div className="mt-1">
+                <FileUpload accept=".jpg,.jpeg,.png" multiple={false} onFilesChange={(files) => setValue('kycDocumentImage', files as any)} label="KYC Document (optional)" />
+                {errors.kycDocumentImage && (
+                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentImage.message as any}</p>
+                )}
+                <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file</p>
+              </div>
             </div>
 
             <div className="md:col-span-2">
