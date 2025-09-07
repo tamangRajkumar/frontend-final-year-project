@@ -80,7 +80,7 @@ const Home: NextPage = () => {
                 </a>
               </Link>
               <Link href="/auth/signup">
-                <a className="px-6 py-3 rounded-xl font-semibold border border-white/30 bg-white/60 backdrop-blur-md hover:bg-white/20 transition">
+                <a className="px-6 py-3 rounded-xl font-semibold border border-gray-200 bg-white/60 backdrop-blur-sm hover:bg-white/70 transition text-gray-900">
                   Create Your Profile
                 </a>
               </Link>
