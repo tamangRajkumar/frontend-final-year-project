@@ -9,6 +9,7 @@ import Link from "next/link";
 import { loginSchema, LoginFormData } from "../../src/validation/schemas";
 import AnimatedAuthBg from "../../src/components/common/AnimatedAuthBg";
 import SocialButtons from "../../src/components/auth/SocialButtons";
+import Logo from "../../src/components/headerFooter/Logo";
 
 const Login: NextPage = () => {
   const router = useRouter();
