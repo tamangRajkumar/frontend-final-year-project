@@ -89,19 +89,19 @@ const Home: NextPage = () => {
 
           <div className="relative mt-12 mx-auto max-w-5xl bg-white/60 backdrop-blur-sm border border-gray-200 rounded-3xl p-4 sm:p-6 shadow-2xl">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-gray-600">
-              <div className="rounded-2xl bg-white/5 p-4">
+              <div className="rounded-2xl bg-white/80 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>10k+</div>
                 <div className="text-sm">Connections Made</div>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4">
+              <div className="rounded-2xl bg-white/80 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>2k+</div>
                 <div className="text-sm">Active Founders</div>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4">
+              <div className="rounded-2xl bg-white/80 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>500+</div>
                 <div className="text-sm">Live Proposals</div>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4">
+              <div className="rounded-2xl bg-white/80 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>120+</div>
                 <div className="text-sm">Events & Workshops</div>
               </div>
@@ -309,7 +309,7 @@ const Home: NextPage = () => {
           </section>
 
           {/* Newsletter */}
-          <section className="bg-white/5 backdrop-blur-sm border border-gray-200 rounded-3xl p-6">
+          <section className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-3xl p-6">
             <div className="flex flex-col md:flex-row items-center gap-4">
               <div className="flex-1">
                 <h3 className="text-xl font-semibold">Stay in the loop</h3>
