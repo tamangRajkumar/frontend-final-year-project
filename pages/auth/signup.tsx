@@ -102,8 +102,8 @@ const Signup: NextPage = () => {
       <div className="w-full max-w-4xl">
         <div className="bg-white/80 border border-gray-200 rounded-3xl p-8 shadow-lg">
           <div className="text-center mb-6">
-            <div className="mx-auto w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-br from-orange-500 to-orange-300 text-white text-2xl font-extrabold shadow-xl">
-              LC
+            <div className="mx-auto w-20 h-20">
+              <Logo size={64} />
             </div>
             <h2 className="mt-4 text-2xl font-bold text-gray-900">Create your account</h2>
             <p className="text-sm text-gray-600">Join founders, post proposals, and find your match.</p>
