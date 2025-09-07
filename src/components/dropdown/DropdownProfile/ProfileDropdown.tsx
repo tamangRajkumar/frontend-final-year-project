@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../../../redux/actions/authActions";
 import { toast } from "react-toastify";
 
-const ProfileDropdown = ({ showProfileDropdown }: any) => {
+const ProfileDropdown = ({ showProfileDropdown, onClose, dropdownRef }: any) => {
   
   //check whether the user is logged in or not if logged in and isAuthenticated is true
   const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
