@@ -232,62 +232,43 @@ const Navbar: NextPage = () => {
               )}
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* View Notifications   */}
-                {authUser && (
+                {authUser ? (
                   <>
                     <div className="relative mr-3">
                       <button
                         type="button"
                         className="rounded-full bg-white/80 p-1 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-200"
                       >
-                        {/* View notifications bell  */}
-                        <HiBell
-                          className="h-6 w-6 p-0.5 "
-                          fill="none"
-                          strokeWidth="1.5"
-                        />
+                        <HiBell className="h-6 w-6 p-0.5" fill="none" strokeWidth="1.5" />
                       </button>
-                      {/* notification count badge */}
-                      <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white rounded-full"
-                        style={{ background: brand }}>
-                        3
-                      </span>
+                      <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white rounded-full" style={{ background: brand }}>3</span>
                     </div>
+
+                    <div>
+                      <button
+                        ref={profileDropdownBtnRef}
+                        className={`flex ml-2 rounded-full p-1.5 text-sm focus:outline-none border border-gray-200 shadow transition ${showProfileDropdown ? 'ring-2 ring-orange-300 bg-white/90 shadow-lg' : 'bg-white/80 hover:shadow-lg'}`}
+                        id="user-menu-button"
+                        aria-expanded={showProfileDropdown}
+                        aria-haspopup="true"
+                        onClick={handleshowProfileDropdown}
+                      >
+                        {profileUrl ? (
+                          <img className="h-9 w-9 rounded-full object-cover" src={profileUrl} alt="" />
+                        ) : (
+                          <img className="h-9 w-9 rounded-full shadow-md object-cover" src="https://res.cloudinary.com/dltfhwsui/image/upload/v1665376261/Avatar_nvh0hb.png" alt="" />
+                        )}
+                      </button>
+                    </div>
+
+                    <ProfileDropdown showProfileDropdown={showProfileDropdown} onClose={() => setShowProfileDropdown(false)} dropdownRef={dropdownRef} />
                   </>
-                )}
-                {/* Profile dropdown */}
-                <div className="relative ml-3">
-                  <div>
-                    <button
-                      ref={profileDropdownBtnRef}
-                      className={`flex ml-2 rounded-full p-1.5 text-sm focus:outline-none border border-gray-200 shadow transition ${showProfileDropdown ? 'ring-2 ring-orange-300 bg-white/90 shadow-lg' : 'bg-white/80 hover:shadow-lg'}`}
-                      id="user-menu-button"
-                      aria-expanded={showProfileDropdown}
-                      aria-haspopup="true"
-                      onClick={handleshowProfileDropdown}
-                    >
-                      {profileUrl ? (
-                        <>
-                         <img
-                            className="h-9 w-9 rounded-full object-cover"
-                            src={profileUrl}
-                            alt=""
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            className="h-9 w-9 rounded-full shadow-md object-cover"
-                            src="https://res.cloudinary.com/dltfhwsui/image/upload/v1665376261/Avatar_nvh0hb.png"
-                            alt=""
-                          />
-                        </>
-                      )}
-                    </button>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <Link href="/auth/login"><a className="px-3 py-2 rounded-md text-sm font-medium border border-gray-200 bg-white/80 hover:shadow">Log in</a></Link>
+                    <Link href="/auth/signup"><a className="px-3 py-2 rounded-md text-sm font-medium text-white" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>Sign up</a></Link>
                   </div>
-                  {/* Profile Dropdown */}
-                  <ProfileDropdown showProfileDropdown={showProfileDropdown} onClose={() => setShowProfileDropdown(false)} dropdownRef={dropdownRef} />
-                </div>
+                )}
               </div>
             </div>
           </div>
