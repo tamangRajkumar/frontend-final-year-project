@@ -23,6 +23,12 @@ const User: NextPage = () => {
 
   const router = useRouter();
 
+  // All hooks must be called at the top level, before any conditional returns
+  const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
+  const token = useSelector((state: any) => state.authUser.token);
+  const currentUser = useSelector((state: any) => state.authUser.currentUser);
+  const user = useSelector((state: any) => state.authUser.currentUser);
+
   const handlePostModal = () => {
     setPostModal(true);
   };
@@ -36,12 +42,6 @@ const User: NextPage = () => {
     setIsClient(true);
   }, []);
 
-  //check whether the user is logged in or not if logged in and isAuthenticated is true then redirect to dashboard
-  const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
-  console.log(authUser);
-  const token = useSelector((state: any) => state.authUser.token);
-  const currentUser = useSelector((state: any) => state.authUser.currentUser);
-  
   // Redirect based on user role
   useEffect(() => {
     if (isClient && currentUser && authUser) {
@@ -60,30 +60,8 @@ const User: NextPage = () => {
       }
     }
   }, [currentUser, authUser, router, isClient]);
-  
-  // Prevent hydration mismatch by not rendering until client-side
-  if (!isClient) {
-    return <div>Loading...</div>;
-  }
 
-  if (authUserCheck == false) {
-    router.push("/auth/login");
-  }
-
-  const user = useSelector((state: any) => state.authUser.currentUser);
-  // console.log(user);
-
-  useEffect(() => {
-    setAuthUserCheck(authUser);
-    setUserData(user);
-  });
-
-  //get user posts
-  useEffect(() => {
-    if (currentUser && token) getUserPosts();
-  }, [token]);
-
-  // Fetch user Posts in dashboard
+  // Fetch user Posts in dashboard - Define function before using it
   const getUserPosts = async () => {
     try {
       const { data } = await fetchPosts(token);
@@ -99,36 +77,54 @@ const User: NextPage = () => {
     }
   };
 
+  useEffect(() => {
+    setAuthUserCheck(authUser);
+    setUserData(user);
+  }, [authUser, user]);
 
-    // Handle Post liked by user
-    const handlePostLiked = async (postId: any) => {
-      try {
-        // console.log(postId)
-        const { data } = await postLiked(postId, token);
-        console.log(data);
-        if (data.postLiked) {
-          getUserPosts();
-          toast.success("Post Liked");
-        }
-      } catch (error) {
-        console.log("Error => ", error);
+  // Handle Post liked by user
+  const handlePostLiked = async (postId: any) => {
+    try {
+      // console.log(postId)
+      const { data } = await postLiked(postId, token);
+      console.log(data);
+      if (data.postLiked) {
+        getUserPosts();
+        toast.success("Post Liked");
       }
-    };
+    } catch (error) {
+      console.log("Error => ", error);
+    }
+  };
+
+  //Handle Post unliked by user
+  const handlePostUnliked = async (postId: any) => {
+    try {
+      console.log(postId);
+      const { data } = await postUnliked(postId, token);
+      // console.log(data);
+      if (data.postUnliked) {
+        getUserPosts();
+        toast.success("Post Unliked");
+      }
+    } catch (error) {
+      console.log("Error => ", error);
+    }
+  };
+
+  //get user posts
+  useEffect(() => {
+    if (currentUser && token) getUserPosts();
+  }, [token, currentUser, getUserPosts]);
   
-    //Handle Post unliked by user
-    const handlePostUnliked = async (postId: any) => {
-      try {
-        console.log(postId);
-        const { data } = await postUnliked(postId, token);
-        // console.log(data);
-        if (data.postUnliked) {
-          getUserPosts();
-          toast.success("Post Unliked");
-        }
-      } catch (error) {
-        console.log("Error => ", error);
-      }
-    };
+  // Prevent hydration mismatch by not rendering until client-side
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
+
+  if (authUserCheck == false) {
+    router.push("/auth/login");
+  }
   
 
   return (
