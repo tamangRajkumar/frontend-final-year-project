@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                 style={{ backgroundImage: `linear-gradient(90deg, ${brand}, #1f2937)` }}>
               Find the Right Cofounder, Faster
             </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-zinc-200">
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
               Discover aligned partners, validate ideas, and build together with confidence.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           </div>
 
           <div className="relative mt-12 mx-auto max-w-5xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-4 sm:p-6 shadow-2xl">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-zinc-200">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-gray-600">
               <div className="rounded-2xl bg-white/5 p-4">
                 <div className="text-2xl font-bold" style={{ color: brand }}>10k+</div>
                 <div className="text-sm">Connections Made</div>
