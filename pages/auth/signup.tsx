@@ -29,6 +29,7 @@ const Signup: NextPage = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({ resolver: zodResolver(signupSchema) });
 
