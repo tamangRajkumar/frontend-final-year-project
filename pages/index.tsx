@@ -66,7 +66,7 @@ const Home: NextPage = () => {
               <HiSparkles className="h-4 w-4 text-orange-500" /> LinkCofounders
             </span>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent"
-                style={{ backgroundImage: `linear-gradient(90deg, ${brand}, #fff)` }}>
+                style={{ backgroundImage: `linear-gradient(90deg, ${brand}, #1f2937)` }}>
               Find the Right Cofounder, Faster
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-zinc-200">
