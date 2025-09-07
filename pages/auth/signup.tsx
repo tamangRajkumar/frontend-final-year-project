@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { signUp, uploadImage } from "../api";
 import { useRouter } from "next/router";
-import Image from "next/image";
-import { Image1 } from "../../src/assets";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { countriesData } from "../api";
@@ -11,54 +9,39 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, SignupFormData } from "../../src/validation/schemas";
+import AnimatedAuthBg from "../../src/components/common/AnimatedAuthBg";
+import SocialButtons from "../../src/components/auth/SocialButtons";
+import Logo from "../../src/components/headerFooter/Logo";
+import FileUpload from "../../src/components/common/FileUpload";
 
 const Signup: NextPage = () => {
   const [countries, setCountries] = useState<any[]>([]);
   const router = useRouter();
 
-  //check whether the user is logged in or not if logged in and isAuthenticated is true then redirect to dashboard
+  // Redirect if already authenticated
   const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
-  
   if (authUser == true && currentUser) {
-    // Route based on user role
-    const userRole = currentUser.role;
-    let dashboardRoute = "/dashboard/user";
-    
-    switch (userRole) {
-      case "admin":
-        dashboardRoute = "/dashboard/admin";
-        break;
-      case "business":
-        dashboardRoute = "/dashboard/business";
-        break;
-      case "user":
-      default:
-        dashboardRoute = "/dashboard/user";
-        break;
-    }
-    
-    router.push(dashboardRoute);
+    const role = currentUser.role;
+    const route = role === 'admin' ? '/dashboard/admin' : role === 'business' ? '/dashboard/business' : '/dashboard/user';
+    router.push(route);
   }
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
-  });
+  } = useForm<SignupFormData>({ resolver: zodResolver(signupSchema) });
 
   const onSubmit = async (data: SignupFormData) => {
     try {
       // Handle file upload for KYC document
       let kycDocumentImage = { url: "", public_id: "" };
-      
-      if (data.kycDocumentImage && data.kycDocumentImage.length > 0) {
-        const file = data.kycDocumentImage[0];
+      if (data.kycDocumentImage && (data.kycDocumentImage as any).length > 0) {
+        const file = (data.kycDocumentImage as any)[0];
         const formData = new FormData();
         formData.append('file', file);
-        
         try {
           const uploadResponse = await uploadImage(formData, '');
           kycDocumentImage = uploadResponse.data;
@@ -82,19 +65,12 @@ const Signup: NextPage = () => {
           documentNumber: data.kycDocumentNumber,
           documentImage: kycDocumentImage,
         },
-        userProfileImage: {
-          url: "",
-          public_key: "",
-        },
-        userCoverImage: {
-          url: "",
-          public_key: "",
-        },
+        userProfileImage: { url: "", public_key: "" },
+        userCoverImage: { url: "", public_key: "" },
         favoritePostsList: [],
       };
-      
+
       const { data: response } = await signUp(signUpData);
-      console.log(response);
       if (response.ok) {
         router.push("/auth/login");
         toast.success("Successfully signed up! Your account is pending KYC verification. Please wait for admin approval.");
@@ -105,7 +81,6 @@ const Signup: NextPage = () => {
     }
   };
 
-  // Fetch countries name api
   useEffect(() => {
     fetchCountriesData();
   }, []);
@@ -113,246 +88,117 @@ const Signup: NextPage = () => {
   const fetchCountriesData = async () => {
     try {
       const { data } = await countriesData();
-      console.log(
-        data?.data.map((c: any) => {
-          return c.country;
-        })
-      );
-      setCountries(data?.data);
+      setCountries(data?.data || []);
     } catch (error) {
       console.log("Error=>", error);
     }
   };
 
+  const handleSocial = (type: string) => {
+    alert(`Social signup: ${type}`);
+  };
+
   return (
-    <>
-      <div className=" flex justify-around mt-16 mb-20 ">
-        {/* Posted Image  */}
-        <div className="flex  w-[90vh]     ">
-          <Image
-            src={Image1}
-            alt="Picture of the user"
-            // layout="fill"
-            // objectFit="contain"
-            className="cursor-pointer"
-          />
-        </div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+      <AnimatedAuthBg />
 
-        <div className=" flex-cols mt-5 justify-center items-center">
-          <div className="flex justify-center items-center">
-            <h1 className="text-2xl font-bold">Sign Up</h1>
+      <div className="w-full max-w-4xl">
+        <div className="bg-white/80 border border-gray-200 rounded-3xl p-8 shadow-lg">
+          <div className="text-center mb-6">
+            <div className="mx-auto w-20 h-20">
+              <Logo size={64} />
+            </div>
+            <h2 className="mt-4 text-2xl font-bold text-gray-900">Create your account</h2>
+            <p className="text-sm text-gray-600">Join founders, post proposals, and find your match.</p>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Full name fields */}
-            <div className="flex justify-center items-center space-x-6">
-              {/* First Name Field */}
-              <div className="my-5 flex flex-col justify-center">
-                <input
-                  type="text"
-                  {...register("fname")}
-                  placeholder="First Name"
-                  className={`py-1.5 px-2 shadow-md rounded-2xl outline-none text-center ${
-                    errors.fname ? "border-2 border-red-500" : ""
-                  }`}
-                />
-                {errors.fname && (
-                  <p className="text-red-500 text-sm mt-1 text-center">
-                    {errors.fname.message}
-                  </p>
-                )}
-              </div>
 
-              {/* Last Name Field */}
-              <div className="my-5 flex flex-col justify-center">
-                <input
-                  type="text"
-                  {...register("lname")}
-                  placeholder="Last Name"
-                  className={`py-1.5 px-6 shadow-md rounded-2xl outline-none text-center ${
-                    errors.lname ? "border-2 border-red-500" : ""
-                  }`}
-                />
-                {errors.lname && (
-                  <p className="text-red-500 text-sm mt-1 text-center">
-                    {errors.lname.message}
-                  </p>
-                )}
-              </div>
+          <div className="mb-4">
+            <SocialButtons onSocial={handleSocial} />
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm text-gray-700">First name</label>
+              <input type="text" {...register("fname")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-300 ${errors.fname ? 'ring-2 ring-red-300' : ''}`} />
+              {errors.fname && <p className="text-red-500 text-sm mt-1">{errors.fname.message}</p>}
             </div>
 
-            {/* Choose country Field */}
-            <div className=" mt-2 flex flex-col justify-center items-center ">
-              <select
-                {...register("country")}
-                className={`text-gray-400 px-3 w-[30vh] py-1 focus:outline-none shadow-md border-gray-300 rounded-xl cursor-pointer ${
-                  errors.country ? "border-2 border-red-500" : ""
-                }`}
-              >
-                <option value="">Select your country</option>
-                {countries?.map((data: any, i: number) => {
-                  return (
-                    <option key={i} value={data.country}>
-                      {data.country}
-                    </option>
-                  );
-                })}
+            <div>
+              <label className="text-sm text-gray-700">Last name</label>
+              <input type="text" {...register("lname")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-300 ${errors.lname ? 'ring-2 ring-red-300' : ''}`} />
+              {errors.lname && <p className="text-red-500 text-sm mt-1">{errors.lname.message}</p>}
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-700">Email</label>
+              <input type="email" {...register("email")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-300 ${errors.email ? 'ring-2 ring-red-300' : ''}`} />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-700">Password</label>
+              <input type="password" {...register("password")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-300 ${errors.password ? 'ring-2 ring-red-300' : ''}`} />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+            </div>
+
+            <div>
+              <label className="text-sm text-gray-700">Country</label>
+              <select {...register("country")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none ${errors.country ? 'ring-2 ring-red-300' : ''}`}>
+                <option value="">Select country</option>
+                {countries?.map((c: any, i: number) => (<option key={i} value={c.country}>{c.country}</option>))}
               </select>
-              {errors.country && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.country.message}
-                </p>
-              )}
+              {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>}
             </div>
 
-            {/* Select gender options */}
-            <div className=" mt-5 flex flex-col justify-center items-center ">
-              <select
-                {...register("gender")}
-                className={`text-gray-400 px-3 w-[20vh] py-1 focus:outline-none shadow-md border-gray-300 rounded-xl cursor-pointer ${
-                  errors.gender ? "border-2 border-red-500" : ""
-                }`}
-              >
-                <option value="">Gender</option>
+            <div>
+              <label className="text-sm text-gray-700">Gender</label>
+              <select {...register("gender")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none ${errors.gender ? 'ring-2 ring-red-300' : ''}`}>
+                <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Others">Others</option>
               </select>
-              {errors.gender && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.gender.message}
-                </p>
-              )}
+              {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>}
             </div>
 
-            {/* Select account type */}
-            <div className=" mt-5 flex flex-col justify-center items-center ">
-              <select
-                {...register("role")}
-                className={`text-gray-400 px-3 w-[25vh] py-1 focus:outline-none shadow-md border-gray-300 rounded-xl cursor-pointer ${
-                  errors.role ? "border-2 border-red-500" : ""
-                }`}
-              >
-                <option value="">Account Type</option>
+            <div>
+              <label className="text-sm text-gray-700">Account type</label>
+              <select {...register("role")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none ${errors.role ? 'ring-2 ring-red-300' : ''}`}>
+                <option value="">Select</option>
                 <option value="user">Personal Account</option>
                 <option value="business">Business Account</option>
               </select>
-              {errors.role && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.role.message}
-                </p>
-              )}
+              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
             </div>
 
-            {/* Email Field */}
-            <div className="my-5 flex flex-col justify-center items-center ">
-              <input
-                type="email"
-                {...register("email")}
-                placeholder="Email"
-                className={`py-1.5 px-10 shadow-md rounded-2xl outline-none text-center ${
-                  errors.email ? "border-2 border-red-500" : ""
-                }`}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.email.message}
-                </p>
-              )}
+            <div className="md:col-span-2">
+              {/* KYC upload using modern FileUpload component */}
+              <div className="mt-1">
+                <FileUpload accept=".jpg,.jpeg,.png" multiple={false} onFilesChange={(files) => setValue('kycDocumentImage', files as any)} label="KYC Document (optional)" />
+                {errors.kycDocumentImage && (
+                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentImage.message as any}</p>
+                )}
+                <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file</p>
+              </div>
             </div>
 
-            {/* Password field */}
-            <div className="mb-5 flex flex-col justify-center items-center ">
-              <input
-                type="password"
-                {...register("password")}
-                placeholder="Password"
-                className={`py-1.5 px-5 shadow-md rounded-2xl outline-none text-center ${
-                  errors.password ? "border-2 border-red-500" : ""
-                }`}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* KYC Document Type */}
-            <div className="mb-5 flex flex-col justify-center items-center ">
-              <select
-                {...register("kycDocumentType")}
-                className={`text-gray-400 px-3 w-[25vh] py-1 focus:outline-none shadow-md border-gray-300 rounded-xl cursor-pointer ${
-                  errors.kycDocumentType ? "border-2 border-red-500" : ""
-                }`}
-              >
-                <option value="">Document Type</option>
-                <option value="citizenship">Citizenship</option>
-                <option value="pan_card">PAN Card</option>
-              </select>
-              {errors.kycDocumentType && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.kycDocumentType.message}
-                </p>
-              )}
-            </div>
-
-            {/* KYC Document Number */}
-            <div className="mb-5 flex flex-col justify-center items-center ">
-              <input
-                type="text"
-                {...register("kycDocumentNumber")}
-                placeholder="Document Number"
-                className={`py-1.5 px-5 shadow-md rounded-2xl outline-none text-center ${
-                  errors.kycDocumentNumber ? "border-2 border-red-500" : ""
-                }`}
-              />
-              {errors.kycDocumentNumber && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.kycDocumentNumber.message}
-                </p>
-              )}
-            </div>
-
-            {/* KYC Document Upload */}
-            <div className="mb-5 flex flex-col justify-center items-center ">
-              <input
-                type="file"
-                {...register("kycDocumentImage")}
-                accept=".jpg,.jpeg,.png"
-                className={`py-1.5 px-5 shadow-md rounded-2xl outline-none text-center text-sm ${
-                  errors.kycDocumentImage ? "border-2 border-red-500" : ""
-                }`}
-              />
-              <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file</p>
-              {errors.kycDocumentImage && (
-                <p className="text-red-500 text-sm mt-1 text-center">
-                  {errors.kycDocumentImage.message}
-                </p>
-              )}
-            </div>
-            <div className="flex justify-center items-center">
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="text-md font-bold bg-black text-white px-5 pt-1 pb-2 rounded-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Signing up..." : "Sign Up"}
+            <div className="md:col-span-2">
+              <button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-3 font-semibold text-white shadow-lg" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
+                {isSubmitting ? 'Signing up...' : 'Create account'}
               </button>
             </div>
 
-            {/* Login Redirect */}
-            <div className="flex space-x-2 mt-5 justify-center items-center">
-              <p>Already Signed up?</p>
-              <Link href="/auth/login">
-                <a className="text-red-400 underline underline-offset-4 cursor-pointer">
-                  Log in
-                </a>
-              </Link>
+            <div className="md:col-span-2 text-center text-sm text-gray-700">
+              By signing up you agree to our <a className="text-orange-500">Terms</a> and <a className="text-orange-500">Privacy</a>.
             </div>
           </form>
+
+          <div className="mt-4 text-center text-sm text-gray-700">
+            Already have an account? <Link href="/auth/login"><a className="text-orange-500 underline">Log in</a></Link>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

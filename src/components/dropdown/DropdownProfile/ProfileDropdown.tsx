@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../../../redux/actions/authActions";
 import { toast } from "react-toastify";
 
-const ProfileDropdown = ({ showProfileDropdown }: any) => {
+const ProfileDropdown = ({ showProfileDropdown, onClose, dropdownRef }: any) => {
   
   //check whether the user is logged in or not if logged in and isAuthenticated is true
   const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
@@ -84,71 +84,76 @@ s
         To: "transform opacity-0 scale-95"
     */}
           <div
-            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 
-            shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-in-out duration-700  "
+            ref={dropdownRef}
+            className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 py-1 shadow-lg focus:outline-none transform transition-all duration-150 ease-out"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu-button"
             tabIndex={-1}
+            style={{ animation: 'dropdownIn 160ms ease forwards' }}
           >
-            {/* Active: "bg-gray-100", Not Active: "" */}
-
+            {/* Items */}
             {authUser
               ? // If user is logged in dropdown for user
-                ProfileDropdownDataLoggedIn.map((data) => {
-                  return (
-                    <div key={data.name}>
-                      <Link href={data.link}>
-                        <a
-                          className={
-                            router.pathname == data.link
-                              ? "block px-4 py-2 text-base text-gray-700 bg-gray-200"
-                              : "block px-4 py-2 text-base text-gray-700 hover:bg-gray-200"
-                          }
-                          role="menuitem"
-                          tabIndex={-1}
-                          id="user-menu-item-0"
-                        >
-                          {data.name}
-                        </a>
-                      </Link>
-                    </div>
-                  );
-                })
+                ProfileDropdownDataLoggedIn.map((data, idx) => (
+                  <div key={data.name}>
+                    <Link href={data.link}>
+                      <a
+                        onClick={() => onClose && onClose()}
+                        className={
+                          router.pathname == data.link
+                            ? "flex items-center justify-between px-4 py-2 text-sm text-gray-800 bg-white/30 font-medium"
+                            : "flex items-center justify-between px-4 py-2 text-sm text-gray-800 hover:bg-white/30 transition"
+                        }
+                        role="menuitem"
+                        tabIndex={-1}
+                      >
+                        <span>{data.name}</span>
+                        {data.name === 'Your Profile' && <span className="text-xs text-gray-500">Profile</span>}
+                      </a>
+                    </Link>
+                  </div>
+                ))
               : // if user is not logged in dropdown for user
-                ProfileDropdownDataNotLoggedIn.map((data) => {
-                  return (
-                    <div key={data.name}>
-                      <Link href={data.link}>
-                        <a
-                          className={
-                            router.pathname == data.link
-                              ? "block px-4 py-2 text-base text-gray-700 bg-gray-200"
-                              : "block px-4 py-2 text-base text-gray-700 hover:bg-gray-200"
-                          }
-                          role="menuitem"
-                          tabIndex={-1}
-                          id="user-menu-item-0"
-                        >
-                          {data.name}
-                        </a>
-                      </Link>
-                    </div>
-                  );
-                })}
+                ProfileDropdownDataNotLoggedIn.map((data) => (
+                  <div key={data.name}>
+                    <Link href={data.link}>
+                      <a
+                        onClick={() => onClose && onClose()}
+                        className={
+                          router.pathname == data.link
+                            ? "block px-4 py-2 text-base text-gray-800 bg-white/30 font-medium"
+                            : "block px-4 py-2 text-base text-gray-800 hover:bg-white/30 transition"
+                        }
+                        role="menuitem"
+                        tabIndex={-1}
+                      >
+                        {data.name}
+                      </a>
+                    </Link>
+                  </div>
+                ))}
 
             {authUser && (
-              <div onClick={handleLogOut} className="cursor-pointer" >
+              <div>
                 <span
-                  className="block px-4 py-2 text-base text-gray-700 hover:bg-gray-200"
+                  onClick={() => {
+                    handleLogOut();
+                    onClose && onClose();
+                  }}
+                  className="block mt-1 px-4 py-2 text-sm text-gray-800 hover:bg-white/30 transition cursor-pointer font-medium"
                   role="menuitem"
                   tabIndex={-1}
-                  id="user-menu-item-0"
                 >
                   Sign Out
                 </span>
               </div>
             )}
+
+            <style jsx>{`
+              @keyframes dropdownIn { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+              @keyframes dropdownOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-6px) scale(0.98); } }
+            `}</style>
           </div>
         </>
       )}
