@@ -276,9 +276,9 @@ const Navbar: NextPage = () => {
                   <div>
                     <button
                       ref={profileDropdownBtnRef}
-                      className="flex ml-2 rounded-full bg-white/80 p-1.5 text-sm focus:outline-none border border-gray-200 shadow hover:shadow-lg transition"
+                      className={`flex ml-2 rounded-full p-1.5 text-sm focus:outline-none border border-gray-200 shadow transition ${showProfileDropdown ? 'ring-2 ring-orange-300 bg-white/90 shadow-lg' : 'bg-white/80 hover:shadow-lg'}`}
                       id="user-menu-button"
-                      aria-expanded="false"
+                      aria-expanded={showProfileDropdown}
                       aria-haspopup="true"
                       onClick={handleshowProfileDropdown}
                     >
