@@ -52,8 +52,8 @@ const Login: NextPage = () => {
           {/* Left - Intro */}
           <div className="hidden md:flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-300 flex items-center justify-center text-white font-bold shadow-lg animate-fadeIn">
-                LC
+              <div className="h-12 w-12">
+                <Logo size={44} />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">Welcome back</h3>
