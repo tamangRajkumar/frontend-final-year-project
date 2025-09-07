@@ -157,28 +157,9 @@ const Navbar: NextPage = () => {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   {/* Mobile View */}
-                  <Link href="/">
-                    {/* <img
-                      className="block h-8 w-auto lg:hidden cursor-pointer"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                      alt="Your Company"
-                    /> */}
-                    <p className="block h-8 w-auto lg:hidden cursor-pointer font-bold text-xl">
-                      LinkCofounders
-                    </p>
-                  </Link>
-
-                  {/* Web View */}
-                  <Link href="/">
-                    {/* <img
-                      className="hidden h-8 w-auto lg:block cursor-pointer"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                      alt="Your Company"
-                    /> */}
-                    <p className="hidden h-8 w-auto lg:block cursor-pointer font-bold text-xl">
-                      LinkCofounders
-                    </p>
-                  </Link>
+                  <div className="flex items-center gap-2">
+                  <Logo size={40} />
+                </div>
                 </div>
               </div>
 
