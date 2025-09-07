@@ -38,6 +38,22 @@ const Navbar: NextPage = () => {
 
   const router = useRouter();
   const profileDropdownBtnRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (!showProfileDropdown) return;
+      const btn = profileDropdownBtnRef.current as Node | null;
+      const dd = dropdownRef.current as Node | null;
+      if (btn && btn.contains && btn.contains(target)) return;
+      if (dd && dd.contains && dd.contains(target)) return;
+      setShowProfileDropdown(false);
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showProfileDropdown]);
 
   const handleshowProfileDropdown = () => {
     setShowProfileDropdown((prev) => !prev);
