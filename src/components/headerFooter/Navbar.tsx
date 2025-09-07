@@ -302,7 +302,7 @@ const Navbar: NextPage = () => {
                     </button>
                   </div>
                   {/* Profile Dropdown */}
-                  <ProfileDropdown showProfileDropdown={showProfileDropdown} />
+                  <ProfileDropdown showProfileDropdown={showProfileDropdown} onClose={() => setShowProfileDropdown(false)} dropdownRef={dropdownRef} />
                 </div>
               </div>
             </div>
