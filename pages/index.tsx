@@ -61,29 +61,34 @@ const Home: NextPage = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-          <div className="relative z-10 text-center">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/60 backdrop-blur-sm border border-gray-200 text-gray-900">
-              <HiSparkles className="h-4 w-4 text-orange-500" /> LinkCofounders
-            </span>
-            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent"
-                style={{ backgroundImage: `linear-gradient(90deg, ${brand}, #1f2937)` }}>
-              Find the Right Cofounder, Faster
-            </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-              Discover aligned partners, validate ideas, and build together with confidence.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/proposals">
-                <a className="px-6 py-3 rounded-xl font-semibold text-white shadow-xl transition transform hover:-translate-y-0.5"
-                   style={{ background: `linear-gradient(135deg, ${brand}, #ff8f57)` }}>
-                  Find Cofounders Now
-                </a>
-              </Link>
-              <Link href="/auth/signup">
-                <a className="px-6 py-3 rounded-xl font-semibold border border-gray-200 bg-white/60 backdrop-blur-sm hover:bg-white/70 transition text-gray-900">
-                  Create Your Profile
-                </a>
-              </Link>
+          <div className="relative z-10 grid lg:grid-cols-2 items-center gap-8">
+            <div className="text-center lg:text-left">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/60 backdrop-blur-sm border border-gray-200 text-gray-900">
+                <HiSparkles className="h-4 w-4 text-orange-500" /> LinkCofounders
+              </span>
+              <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent"
+                  style={{ backgroundImage: `linear-gradient(90deg, ${brand}, #1f2937)` }}>
+                Find the Right Cofounder, Faster
+              </h1>
+              <p className="mt-4 max-w-2xl mx-auto lg:mx-0 text-lg text-gray-600">
+                Discover aligned partners, validate ideas, and build together with confidence.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
+                <Link href="/proposals">
+                  <a className="px-6 py-3 rounded-xl font-semibold text-white shadow-xl transition transform hover:-translate-y-0.5"
+                     style={{ background: `linear-gradient(135deg, ${brand}, #ff8f57)` }}>
+                    Find Cofounders Now
+                  </a>
+                </Link>
+                <Link href="/auth/signup">
+                  <a className="px-6 py-3 rounded-xl font-semibold border border-gray-200 bg-white/60 backdrop-blur-sm hover:bg-white/70 transition text-gray-900">
+                    Create Your Profile
+                  </a>
+                </Link>
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <img src="https://images.unsplash.com/photo-1520857015130-3f6e1c9658b6?auto=format&fit=crop&w=1400&q=80" alt="Cofounders collaborating" className="w-full h-64 sm:h-80 object-cover rounded-3xl shadow-lg" />
             </div>
           </div>
 
