@@ -48,14 +48,14 @@ const Login: NextPage = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <AnimatedAuthBg />
 
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left - Intro */}
           <div className="hidden md:flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12">
+              {/* <div className="h-12 w-12">
                 <Logo size={44} />
-              </div>
+              </div> */}
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">Welcome back</h3>
                 <p className="text-gray-600">Sign in to continue collaborating and find your ideal cofounder.</p>
@@ -82,9 +82,9 @@ const Login: NextPage = () => {
               <p className="text-sm text-gray-600">Fast. Secure. Tailored for founders.</p>
             </div>
 
-            <div className="space-y-4 mb-4">
+            {/* <div className="space-y-4 mb-4">
               <SocialButtons onSocial={handleSocial} />
-            </div>
+            </div> */}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>

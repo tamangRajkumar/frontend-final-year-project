@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { 
-  HiX, 
-  HiPlus, 
-  HiMinus, 
+import {
+  HiX,
+  HiPlus,
+  HiMinus,
   HiPhotograph,
   HiTag,
   HiBriefcase,
@@ -15,13 +15,13 @@ import {
   HiClock,
   HiMail,
   HiPhone,
-  HiGlobe
+  HiGlobe,
 } from "react-icons/hi";
-import { 
-  normalPostSchema, 
-  businessProposalSchema, 
-  NormalPostFormData, 
-  BusinessProposalFormData 
+import {
+  normalPostSchema,
+  businessProposalSchema,
+  NormalPostFormData,
+  BusinessProposalFormData,
 } from "../../validation/schemas";
 import { createPost, uploadImage } from "../../../pages/api";
 // import { createPost, uploadImage } from "../../pages/api/index";
@@ -32,12 +32,18 @@ interface CreatePostModalProps {
   onPostCreated: () => void;
 }
 
-const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPostCreated }) => {
-  const [postType, setPostType] = useState<'normal' | 'business_proposal'>('normal');
+const CreatePostModal: React.FC<CreatePostModalProps> = ({
+  isOpen,
+  onClose,
+  onPostCreated,
+}) => {
+  const [postType, setPostType] = useState<"normal" | "business_proposal">(
+    "normal"
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [requirements, setRequirements] = useState<string[]>(['']);
-  const [benefits, setBenefits] = useState<string[]>(['']);
-  const [tags, setTags] = useState<string[]>(['']);
+  const [requirements, setRequirements] = useState<string[]>([""]);
+  const [benefits, setBenefits] = useState<string[]>([""]);
+  const [tags, setTags] = useState<string[]>([""]);
 
   const token = useSelector((state: any) => state.authUser.token);
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
@@ -48,15 +54,41 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
 
   const proposalForm = useForm<BusinessProposalFormData>({
     resolver: zodResolver(businessProposalSchema),
+    defaultValues: {
+      businessProposal: {
+        requirements: [""],
+        benefits: [""],
+      }
+    }
   });
 
+  const {
+    getValues,
+    setValue: setProposalValue,
+    formState: { errors },
+  } = proposalForm;
+  console.log({ errors });
+  console.log("Form",getValues())
+
+  // Sync local state with form values
+  useEffect(() => {
+    setProposalValue("businessProposal.requirements", requirements);
+  }, [requirements, setProposalValue]);
+
+  useEffect(() => {
+    setProposalValue("businessProposal.benefits", benefits);
+  }, [benefits, setProposalValue]);
   const addRequirement = () => {
-    setRequirements([...requirements, '']);
+    const newRequirements = [...requirements, ""];
+    setRequirements(newRequirements);
+    proposalForm.setValue("businessProposal.requirements", newRequirements);
   };
 
   const removeRequirement = (index: number) => {
     if (requirements.length > 1) {
-      setRequirements(requirements.filter((_, i) => i !== index));
+      const newRequirements = requirements.filter((_, i) => i !== index);
+      setRequirements(newRequirements);
+      proposalForm.setValue("businessProposal.requirements", newRequirements);
     }
   };
 
@@ -64,15 +96,20 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
     const updated = [...requirements];
     updated[index] = value;
     setRequirements(updated);
+    proposalForm.setValue("businessProposal.requirements", updated);
   };
 
   const addBenefit = () => {
-    setBenefits([...benefits, '']);
+    const newBenefits = [...benefits, ""];
+    setBenefits(newBenefits);
+    proposalForm.setValue("businessProposal.benefits", newBenefits);
   };
 
   const removeBenefit = (index: number) => {
     if (benefits.length > 1) {
-      setBenefits(benefits.filter((_, i) => i !== index));
+      const newBenefits = benefits.filter((_, i) => i !== index);
+      setBenefits(newBenefits);
+      proposalForm.setValue("businessProposal.benefits", newBenefits);
     }
   };
 
@@ -80,10 +117,11 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
     const updated = [...benefits];
     updated[index] = value;
     setBenefits(updated);
+    proposalForm.setValue("businessProposal.benefits", updated);
   };
 
   const addTag = () => {
-    setTags([...tags, '']);
+    setTags([...tags, ""]);
   };
 
   const removeTag = (index: number) => {
@@ -101,12 +139,12 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
   const handleImageUpload = async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      const response = await uploadImage(formData, '');
+      formData.append("file", file);
+      const response = await uploadImage(formData, "");
       return response.data;
     } catch (error) {
-      console.error('Image upload error:', error);
-      toast.error('Failed to upload image');
+      console.error("Image upload error:", error);
+      toast.error("Failed to upload image");
       return null;
     }
   };
@@ -124,23 +162,23 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
         title: data.title,
         description: data.description,
         category: data.category,
-        postType: 'normal',
-        tags: tags.filter(tag => tag.trim() !== ''),
+        postType: "normal",
+        tags: tags.filter((tag) => tag.trim() !== ""),
         image: imageData,
       };
 
       const response = await createPost(postData, token);
-      
+
       if (response.data.success) {
-        toast.success('Post created successfully!');
+        toast.success("Post created successfully!");
         normalForm.reset();
-        setTags(['']);
+        setTags([""]);
         onPostCreated();
         onClose();
       }
     } catch (error) {
-      console.error('Error creating post:', error);
-      toast.error('Failed to create post');
+      console.error("Error creating post:", error);
+      toast.error("Failed to create post");
     } finally {
       setIsSubmitting(false);
     }
@@ -159,30 +197,30 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
         title: data.title,
         description: data.description,
         category: data.category,
-        postType: 'business_proposal',
-        tags: tags.filter(tag => tag.trim() !== ''),
+        postType: "business_proposal",
+        tags: tags.filter((tag) => tag.trim() !== ""),
         image: imageData,
         businessProposal: {
           ...data.businessProposal,
-          requirements: requirements.filter(req => req.trim() !== ''),
-          benefits: benefits.filter(benefit => benefit.trim() !== ''),
+          requirements: requirements.filter((req) => req.trim() !== ""),
+          benefits: benefits.filter((benefit) => benefit.trim() !== ""),
         },
       };
 
       const response = await createPost(postData, token);
-      
+
       if (response.data.success) {
-        toast.success('Business proposal created successfully!');
+        toast.success("Business proposal created successfully!");
         proposalForm.reset();
-        setTags(['']);
-        setRequirements(['']);
-        setBenefits(['']);
+        setTags([""]);
+        setRequirements([""]);
+        setBenefits([""]);
         onPostCreated();
         onClose();
       }
     } catch (error) {
-      console.error('Error creating proposal:', error);
-      toast.error('Failed to create business proposal');
+      console.error("Error creating proposal:", error);
+      toast.error("Failed to create business proposal");
     } finally {
       setIsSubmitting(false);
     }
@@ -197,7 +235,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-medium text-gray-900">
-              Create {postType === 'normal' ? 'Post' : 'Business Proposal'}
+              Create {postType === "normal" ? "Post" : "Business Proposal"}
             </h3>
             <button
               onClick={onClose}
@@ -215,23 +253,23 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
             <div className="flex space-x-4">
               <button
                 type="button"
-                onClick={() => setPostType('normal')}
+                onClick={() => setPostType("normal")}
                 className={`px-4 py-2 rounded-lg border transition-colors ${
-                  postType === 'normal'
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                  postType === "normal"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }`}
               >
                 Normal Post
               </button>
-              {currentUser?.role === 'business' && (
+              {currentUser?.role === "business" && (
                 <button
                   type="button"
-                  onClick={() => setPostType('business_proposal')}
+                  onClick={() => setPostType("business_proposal")}
                   className={`px-4 py-2 rounded-lg border transition-colors ${
-                    postType === 'business_proposal'
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    postType === "business_proposal"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   Business Proposal
@@ -241,8 +279,11 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
           </div>
 
           {/* Normal Post Form */}
-          {postType === 'normal' && (
-            <form onSubmit={normalForm.handleSubmit(onSubmitNormal)} className="space-y-4">
+          {postType === "normal" && (
+            <form
+              onSubmit={normalForm.handleSubmit(onSubmitNormal)}
+              className="space-y-4"
+            >
               {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -368,15 +409,18 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Creating...' : 'Create Post'}
+                  {isSubmitting ? "Creating..." : "Create Post"}
                 </button>
               </div>
             </form>
           )}
 
           {/* Business Proposal Form */}
-          {postType === 'business_proposal' && (
-            <form onSubmit={proposalForm.handleSubmit(onSubmitProposal)} className="space-y-4">
+          {postType === "business_proposal" && (
+            <form
+              onSubmit={proposalForm.handleSubmit(onSubmitProposal)}
+              className="space-y-4"
+            >
               {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -453,7 +497,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                   />
                   {proposalForm.formState.errors.businessProposal?.industry && (
                     <p className="text-red-500 text-sm mt-1">
-                      {proposalForm.formState.errors.businessProposal.industry.message}
+                      {
+                        proposalForm.formState.errors.businessProposal.industry
+                          .message
+                      }
                     </p>
                   )}
                 </div>
@@ -465,7 +512,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                       Min Investment *
                     </label>
                     <input
-                      {...proposalForm.register("businessProposal.investmentAmount.min", { valueAsNumber: true })}
+                      {...proposalForm.register(
+                        "businessProposal.investmentAmount.min",
+                        { valueAsNumber: true }
+                      )}
                       type="number"
                       min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -477,7 +527,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                       Max Investment *
                     </label>
                     <input
-                      {...proposalForm.register("businessProposal.investmentAmount.max", { valueAsNumber: true })}
+                      {...proposalForm.register(
+                        "businessProposal.investmentAmount.max",
+                        { valueAsNumber: true }
+                      )}
                       type="number"
                       min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -492,7 +545,9 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                     Partnership Type *
                   </label>
                   <select
-                    {...proposalForm.register("businessProposal.partnershipType")}
+                    {...proposalForm.register(
+                      "businessProposal.partnershipType"
+                    )}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">Select partnership type</option>
@@ -502,9 +557,13 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                     <option value="distribution">Distribution</option>
                     <option value="other">Other</option>
                   </select>
-                  {proposalForm.formState.errors.businessProposal?.partnershipType && (
+                  {proposalForm.formState.errors.businessProposal
+                    ?.partnershipType && (
                     <p className="text-red-500 text-sm mt-1">
-                      {proposalForm.formState.errors.businessProposal.partnershipType.message}
+                      {
+                        proposalForm.formState.errors.businessProposal
+                          .partnershipType.message
+                      }
                     </p>
                   )}
                 </div>
@@ -521,7 +580,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                   />
                   {proposalForm.formState.errors.businessProposal?.location && (
                     <p className="text-red-500 text-sm mt-1">
-                      {proposalForm.formState.errors.businessProposal.location.message}
+                      {
+                        proposalForm.formState.errors.businessProposal.location
+                          .message
+                      }
                     </p>
                   )}
                 </div>
@@ -538,7 +600,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                   />
                   {proposalForm.formState.errors.businessProposal?.duration && (
                     <p className="text-red-500 text-sm mt-1">
-                      {proposalForm.formState.errors.businessProposal.duration.message}
+                      {
+                        proposalForm.formState.errors.businessProposal.duration
+                          .message
+                      }
                     </p>
                   )}
                 </div>
@@ -549,11 +614,16 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                     Requirements *
                   </label>
                   {requirements.map((req, index) => (
-                    <div key={index} className="flex items-center space-x-2 mb-2">
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mb-2"
+                    >
                       <input
                         type="text"
                         value={req}
-                        onChange={(e) => updateRequirement(index, e.target.value)}
+                        onChange={(e) =>
+                          updateRequirement(index, e.target.value)
+                        }
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Enter requirement"
                       />
@@ -584,7 +654,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                     Benefits *
                   </label>
                   {benefits.map((benefit, index) => (
-                    <div key={index} className="flex items-center space-x-2 mb-2">
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mb-2"
+                    >
                       <input
                         type="text"
                         value={benefit}
@@ -615,21 +688,29 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
 
                 {/* Contact Information */}
                 <div className="border-t pt-4">
-                  <h5 className="text-sm font-medium text-gray-700 mb-3">Contact Information</h5>
-                  
+                  <h5 className="text-sm font-medium text-gray-700 mb-3">
+                    Contact Information
+                  </h5>
+
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email *
                     </label>
                     <input
-                      {...proposalForm.register("businessProposal.contactInfo.email")}
+                      {...proposalForm.register(
+                        "businessProposal.contactInfo.email"
+                      )}
                       type="email"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="contact@example.com"
                     />
-                    {proposalForm.formState.errors.businessProposal?.contactInfo?.email && (
+                    {proposalForm.formState.errors.businessProposal?.contactInfo
+                      ?.email && (
                       <p className="text-red-500 text-sm mt-1">
-                        {proposalForm.formState.errors.businessProposal.contactInfo.email.message}
+                        {
+                          proposalForm.formState.errors.businessProposal
+                            .contactInfo.email.message
+                        }
                       </p>
                     )}
                   </div>
@@ -640,7 +721,9 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                         Phone
                       </label>
                       <input
-                        {...proposalForm.register("businessProposal.contactInfo.phone")}
+                        {...proposalForm.register(
+                          "businessProposal.contactInfo.phone"
+                        )}
                         type="tel"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="+1 (555) 123-4567"
@@ -651,7 +734,9 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                         Website
                       </label>
                       <input
-                        {...proposalForm.register("businessProposal.contactInfo.website")}
+                        {...proposalForm.register(
+                          "businessProposal.contactInfo.website"
+                        )}
                         type="url"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="https://example.com"
@@ -723,7 +808,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onPo
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Creating...' : 'Create Proposal'}
+                  {isSubmitting ? "Creating..." : "Create Proposal"}
                 </button>
               </div>
             </form>

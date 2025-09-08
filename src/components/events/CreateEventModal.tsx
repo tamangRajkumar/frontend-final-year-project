@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { HiX, HiPlus, HiTrash, HiCalendar, HiClock, HiLocationMarker, HiUsers, HiCurrencyDollar } from "react-icons/hi";
+import { useSelector } from "react-redux";
 import { eventSchema, EventFormData } from "../../validation/schemas";
-import { createEvent, uploadImage } from "../../pages/api";
+import { createEvent, uploadImage } from "../../../pages/api";
 
 interface CreateEventModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [requirements, setRequirements] = useState<string[]>([]);
   const [benefits, setBenefits] = useState<string[]>([]);
+  const token = useSelector((state: any) => state.authUser.token);
   const [newTag, setNewTag] = useState("");
   const [newRequirement, setNewRequirement] = useState("");
   const [newBenefit, setNewBenefit] = useState("");
@@ -69,7 +71,6 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
         registrationFee: data.registrationFee || 0,
       };
 
-      const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Please login to create events");
         return;

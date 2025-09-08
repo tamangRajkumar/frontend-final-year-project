@@ -152,20 +152,26 @@ export const fetchAllUsers = () => {
 
 // Get users list with pagination
 export const getUsersList = (params: any, token: string) => {
+  // Clean token by removing surrounding quotes if present
+  const cleanToken = token?.replace(/^"(.*)"$/, '$1') || token;
+  
   return axios.get(`/users`, {
     params,
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${cleanToken}`,
     },
   });
 };
 
 // Get businesses list with pagination
 export const getBusinessesList = (params: any, token: string) => {
+  // Clean token by removing surrounding quotes if present
+  const cleanToken = token?.replace(/^"(.*)"$/, '$1') || token;
+  
   return axios.get(`/businesses`, {
     params,
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${cleanToken}`,
     },
   });
 };
@@ -181,9 +187,12 @@ export const getUserById = (id: string, token: string) => {
 
 // Update user role
 export const updateUserRole = (id: string, role: string, token: string) => {
+  // Clean token by removing surrounding quotes if present
+  const cleanToken = token?.replace(/^"(.*)"$/, '$1') || token;
+  
   return axios.put(`/users/${id}/role`, { role }, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${cleanToken}`,
     },
   });
 };
@@ -449,9 +458,12 @@ export const addEventComment = (id: string, commentData: any, token: string) => 
 
 // Chat API functions
 export const createOrGetChat = (participantId: string, token: string) => {
+  // Clean token by removing surrounding quotes if present
+  const cleanToken = token?.replace(/^"(.*)"$/, '$1') || token;
+  
   return axios.post(`/chat/create`, { participantId }, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${cleanToken}`,
     },
   });
 };

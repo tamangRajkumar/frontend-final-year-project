@@ -88,7 +88,7 @@ const Home: NextPage = () => {
               </div>
             </div>
             <div className="hidden lg:block">
-              <img src="https://images.unsplash.com/photo-1520857015130-3f6e1c9658b6?auto=format&fit=crop&w=1400&q=80" alt="Cofounders collaborating" className="w-full h-64 sm:h-80 object-cover rounded-3xl shadow-lg" />
+              <img src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Cofounders collaborating" className="w-full h-64 sm:h-80 object-cover rounded-3xl shadow-lg" />
             </div>
           </div>
 

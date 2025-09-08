@@ -18,6 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { getUsersList, updateUserRole, createOrGetChat } from "../api";
 import RoleGuard from "../../src/components/auth/RoleGuard";
+import { getCleanToken, forceTokenCleanup } from "../../src/utils/tokenUtils";
 
 const UsersList: NextPage = () => {
   const [users, setUsers] = useState([]);
@@ -41,8 +42,18 @@ const UsersList: NextPage = () => {
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
 
   useEffect(() => {
-    if (token) {
+    // Get clean token from Redux or localStorage
+    const authToken = getCleanToken(token);
+    
+    console.log("Redux token:", token);
+    console.log("Clean token:", authToken);
+    
+    if (authToken) {
+      console.log("Using clean token for users API:", authToken);
       fetchUsers();
+    } else {
+      console.log("No valid token found, redirecting to login");
+      router.push("/auth/login");
     }
   }, [token, filters]);
 
@@ -56,7 +67,11 @@ const UsersList: NextPage = () => {
         ...(filters.role && { role: filters.role })
       };
 
-      const { data } = await getUsersList(params, token);
+      // Use the clean token
+      const authToken = getCleanToken(token);
+      console.log("Using token for API call:", authToken);
+      
+      const { data } = await getUsersList(params, authToken);
       
       if (data.success) {
         setUsers(data.data);
@@ -64,7 +79,13 @@ const UsersList: NextPage = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Failed to fetch users");
+      console.error("Error response:", error.response?.data);
+      if (error.response?.status === 401) {
+        toast.error("Please login to access users list");
+        router.push("/auth/login");
+      } else {
+        toast.error("Failed to fetch users");
+      }
     } finally {
       setLoading(false);
     }
@@ -76,7 +97,8 @@ const UsersList: NextPage = () => {
   };
 
   const handleRoleChange = (userId: string, newRole: string) => {
-    updateUserRole(userId, newRole, token)
+    const authToken = getCleanToken(token);
+    updateUserRole(userId, newRole, authToken)
       .then(({ data }) => {
         if (data.success) {
           toast.success("User role updated successfully");
@@ -91,7 +113,8 @@ const UsersList: NextPage = () => {
 
   const handleStartChat = async (userId: string) => {
     try {
-      const { data } = await createOrGetChat(userId, token);
+      const authToken = getCleanToken(token);
+      const { data } = await createOrGetChat(userId, authToken);
       if (data.success) {
         router.push(`/chat?chatId=${data.data._id}`);
       }
@@ -126,7 +149,7 @@ const UsersList: NextPage = () => {
   };
 
   return (
-    <RoleGuard allowedRoles={['admin']}>
+    <RoleGuard allowedRoles={['admin', 'user', 'business']}>
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
@@ -135,14 +158,27 @@ const UsersList: NextPage = () => {
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 flex items-center">
                   <HiUsers className="h-8 w-8 mr-3 text-blue-600" />
-                  Users Management
+                  {currentUser?.role === 'admin' ? 'Users Management' : 'Find Users'}
                 </h1>
                 <p className="text-gray-600 mt-2">
-                  Manage all users, roles, and permissions
+                  {currentUser?.role === 'admin' 
+                    ? 'Manage all users, roles, and permissions'
+                    : 'Discover and connect with other users'
+                  }
                 </p>
               </div>
-              <div className="text-sm text-gray-500">
-                Total Users: {pagination.totalUsers}
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-gray-500">
+                  Total Users: {pagination.totalUsers}
+                </div>
+                {process.env.NODE_ENV === 'development' && (
+                  <button
+                    onClick={forceTokenCleanup}
+                    className="px-3 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200"
+                  >
+                    Clear Storage & Reload
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -271,7 +307,7 @@ const UsersList: NextPage = () => {
                           className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm"
                         >
                           <HiChat className="h-4 w-4 mr-1" />
-                          Chat
+                          Message
                         </button>
                       )}
                       {currentUser?.role === 'admin' && (

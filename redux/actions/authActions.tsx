@@ -23,7 +23,7 @@ export const logInUser =
           // Save user data  in local storage
           window.localStorage.setItem("user", JSON.stringify(data.user));
           // Save user authentication token in local storage
-          window.localStorage.setItem("token", JSON.stringify(data.token));
+          window.localStorage.setItem("token", data.token);
 
           // Save user profile data in local storage
           // window.localStorage.setItem(

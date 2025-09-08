@@ -8,7 +8,7 @@ const initialState = {
   isAuthenticated: (typeof window !== 'undefined') && localStorage.getItem("user") ? true : false,
   //After registered backend will send ok:true token and user data that will be stored herer
   token:(typeof window !== 'undefined') && localStorage.getItem("token")
-  ? JSON.parse(localStorage.getItem("token") || "")
+  ? localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1') || ''
   : '',
   currentUser: (typeof window !== 'undefined') && localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user") || "")

@@ -31,9 +31,12 @@ const Signup: NextPage = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({ resolver: zodResolver(signupSchema) });
 
+  const selectedRole = watch("role");
+console.log({errors})
   const onSubmit = async (data: SignupFormData) => {
     try {
       // Handle file upload for KYC document
@@ -112,9 +115,9 @@ const Signup: NextPage = () => {
             <p className="text-sm text-gray-600">Join founders, post proposals, and find your match.</p>
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <SocialButtons onSocial={handleSocial} />
-          </div>
+          </div> */}
 
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -161,20 +164,198 @@ const Signup: NextPage = () => {
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>}
             </div>
 
-            <div>
-              <label className="text-sm text-gray-700">Account type</label>
-              <select {...register("role")} className={`mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none ${errors.role ? 'ring-2 ring-red-300' : ''}`}>
-                <option value="">Select</option>
-                <option value="user">Personal Account</option>
-                <option value="business">Business Account</option>
-              </select>
-              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-4">Account Type *</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* User Account Card */}
+                <div 
+                  className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                    selectedRole === 'user' 
+                      ? 'border-blue-500 bg-blue-50 shadow-md' 
+                      : errors.role 
+                        ? 'border-red-300' 
+                        : 'border-gray-200 hover:border-blue-300'
+                  }`}
+                  onClick={() => setValue('role', 'user')}
+                >
+                  <input
+                    {...register("role")}
+                    type="radio"
+                    value="user"
+                    className="sr-only"
+                  />
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                        selectedRole === 'user' ? 'bg-blue-500' : 'bg-blue-100'
+                      }`}>
+                        <svg className={`w-6 h-6 transition-colors duration-200 ${
+                          selectedRole === 'user' ? 'text-white' : 'text-blue-600'
+                        }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`text-lg font-semibold mb-2 transition-colors duration-200 ${
+                        selectedRole === 'user' ? 'text-blue-900' : 'text-gray-900'
+                      }`}>Personal Account</h3>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Are you a user trying to find cofounders? Join as an individual looking for business partners, investors, or collaborators.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'user' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>Find Cofounders</span>
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'user' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>Network</span>
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'user' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>Collaborate</span>
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                        selectedRole === 'user'
+                          ? 'border-blue-500 bg-blue-500'
+                          : errors.role 
+                            ? 'border-red-300' 
+                            : 'border-gray-300'
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                          selectedRole === 'user' 
+                            ? 'bg-white opacity-100' 
+                            : 'bg-blue-600 opacity-0'
+                        }`}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Business Account Card */}
+                <div 
+                  className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                    selectedRole === 'business' 
+                      ? 'border-green-500 bg-green-50 shadow-md' 
+                      : errors.role 
+                        ? 'border-red-300' 
+                        : 'border-gray-200 hover:border-green-300'
+                  }`}
+                  onClick={() => setValue('role', 'business')}
+                >
+                  <input
+                    {...register("role")}
+                    type="radio"
+                    value="business"
+                    className="sr-only"
+                  />
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                        selectedRole === 'business' ? 'bg-green-500' : 'bg-green-100'
+                      }`}>
+                        <svg className={`w-6 h-6 transition-colors duration-200 ${
+                          selectedRole === 'business' ? 'text-white' : 'text-green-600'
+                        }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`text-lg font-semibold mb-2 transition-colors duration-200 ${
+                        selectedRole === 'business' ? 'text-green-900' : 'text-gray-900'
+                      }`}>Business Account</h3>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Are you a business looking for cofounders? Post proposals, find partners, and grow your business with the right team.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'business' 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>Post Proposals</span>
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'business' 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>Find Partners</span>
+                        <span className={`px-2 py-1 text-xs rounded-full transition-colors duration-200 ${
+                          selectedRole === 'business' 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>Grow Business</span>
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                        selectedRole === 'business'
+                          ? 'border-green-500 bg-green-500'
+                          : errors.role 
+                            ? 'border-red-300' 
+                            : 'border-gray-300'
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                          selectedRole === 'business' 
+                            ? 'bg-white opacity-100' 
+                            : 'bg-green-600 opacity-0'
+                        }`}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {errors.role && <p className="text-red-500 text-sm mt-2">{errors.role.message}</p>}
+            </div>
+
+            <div className="md:col-span-2">
+              {/* KYC Document Type */}
+              <div className="mt-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Document Type *
+                </label>
+                <select
+                  {...register("kycDocumentType")}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select document type</option>
+                  <option value="citizenship">Citizenship Card</option>
+                  <option value="pan_card">PAN Card</option>
+                </select>
+                {errors.kycDocumentType && (
+                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentType.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="md:col-span-2">
+              {/* KYC Document Number */}
+              <div className="mt-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Document Number *
+                </label>
+                <input
+                  {...register("kycDocumentNumber")}
+                  type="text"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your document number"
+                />
+                {errors.kycDocumentNumber && (
+                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentNumber.message}</p>
+                )}
+              </div>
             </div>
 
             <div className="md:col-span-2">
               {/* KYC upload using modern FileUpload component */}
               <div className="mt-1">
-                <FileUpload accept=".jpg,.jpeg,.png" multiple={false} onFilesChange={(files) => setValue('kycDocumentImage', files as any)} label="KYC Document (optional)" />
+                <FileUpload accept=".jpg,.jpeg,.png" multiple={false} onFilesChange={(files) => setValue('kycDocumentImage', files as any)} label="KYC Document Image *" />
                 {errors.kycDocumentImage && (
                   <p className="text-red-500 text-sm mt-1">{errors.kycDocumentImage.message as any}</p>
                 )}

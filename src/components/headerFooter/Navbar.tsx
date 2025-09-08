@@ -87,10 +87,10 @@ const Navbar: NextPage = () => {
   // }, []);
 
   const navMenuItems = [
-    {
-      name: "Home",
-      link: "/",
-    },
+    // {
+    //   name: "Home",
+    //   link: "/",
+    // },
     {
       name: "Posts",
       link: "/posts",
@@ -104,24 +104,30 @@ const Navbar: NextPage = () => {
       link: "/events",
     },
     {
+      name: "Users",
+      link: "/users",
+    },
+    {
       name: "Chat",
       link: "/chat",
     },
-    {
-      name: "Explore Events",
-      link: "/explore_events",
-    },
-    {
-      name: "Find Users",
-      link: "/find_users",
-    },
+    // {
+    //   name: "Explore Events",
+    //   link: "/explore_events",
+    // },
+    // {
+    //   name: "Find Users",
+    //   link: "/find_users",
+    // },
   ];
 
   const brand = '#f26722';
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-40">
+      {/* <div className="fixed top-0 left-0 right-0 z-40"> */}
+      <div className="relative">
+
         {/* Glassy navbar */}
         <nav className="backdrop-blur-sm bg-white/60 border-b border-gray-200">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -204,21 +210,21 @@ const Navbar: NextPage = () => {
               {authUser && (
                 <>
                   {/* Favorite Lists */}
-                  <div className="hidden lg:block mx-3">
+                  {/* <div className="hidden lg:block mx-3">
                     <Link href="/favorite_posts">
                       <HiHeart className="h-7 w-7 text-red-600 cursor-pointer transition hover:scale-105" />
                     </Link>
-                  </div>
+                  </div> */}
 
                   {/* Add new Post button icon  */}
-                  <div
+                  {/* <div
                     onClick={handlePostModal}
                     className="ml-1 hidden lg:block"
                   >
                     <div className="p-2 rounded-lg bg-white/70 border border-gray-200 shadow hover:shadow-lg transition cursor-pointer">
                       <HiPlus className="h-5 w-5 text-gray-900" />
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Post Modal Show Hide */}
                   {postModal && (
@@ -234,7 +240,7 @@ const Navbar: NextPage = () => {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {authUser ? (
                   <>
-                    <div className="relative mr-3">
+                    {/* <div className="relative mr-3">
                       <button
                         type="button"
                         className="rounded-full bg-white/80 p-1 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-200"
@@ -242,7 +248,7 @@ const Navbar: NextPage = () => {
                         <HiBell className="h-6 w-6 p-0.5" fill="none" strokeWidth="1.5" />
                       </button>
                       <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white rounded-full" style={{ background: brand }}>3</span>
-                    </div>
+                    </div> */}
 
                     <div>
                       <button

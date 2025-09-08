@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import Image from "next/image";
 import { Image1, Profile } from "../../src/assets";
-import { HiOutlineCamera, HiPlus, HiChartBar, HiUsers, HiEye, HiHeart, HiBriefcase, HiUserGroup } from "react-icons/hi";
+import { HiOutlineCamera, HiPlus, HiChartBar, HiUsers, HiEye, HiHeart, HiBriefcase, HiUserGroup, HiCalendar } from "react-icons/hi";
 import PostCard from "../../src/components/cards/PostCard";
 import PostModalDashboard from "../../src/components/Modal/PostModalDashboard";
 import CreatePostModal from "../../src/components/posts/CreatePostModal";

@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { HiX, HiPlus, HiTrash } from "react-icons/hi";
+import { useSelector } from "react-redux";
 import { registrationSchema, RegistrationFormData } from "../../validation/schemas";
-import { registerForProposal } from "../../pages/api";
+import { registerForProposal } from "../../../pages/api";
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
+  const token = useSelector((state: any) => state.authUser.token);
 
   const {
     register,
@@ -42,7 +44,6 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
         skills,
       };
 
-      const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Please login to register for proposals");
         return;
