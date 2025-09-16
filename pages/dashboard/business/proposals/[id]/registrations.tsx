@@ -417,3 +417,5 @@ const ProposalRegistrationsPage: NextPage = () => {
 };
 
 export default ProposalRegistrationsPage;
+
+

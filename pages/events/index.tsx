@@ -534,3 +534,5 @@ const EventsPage: NextPage = () => {
 };
 
 export default EventsPage;
+
+

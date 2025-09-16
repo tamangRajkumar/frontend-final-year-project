@@ -79,7 +79,7 @@ const PostModalDashboard: NextPage = ({
       <BackgroundGray dashboardTrue={dashboardTrue} />
       <div
         style={{ width: "40rem" }}
-        className="fixed ml-auto mr-auto left-0 right-0 bg-white  top-20  z-50 rounded-lg"
+        className="fixed ml-auto mr-auto left-0 right-0 bg-white top-20 z-[9999] rounded-lg shadow-2xl"
       >
         <div className="flex  justify-between  mx-10 mt-3">
           {/* check if post is to be edited or not */}

@@ -75,7 +75,7 @@ const ChatPage: NextPage = () => {
   const router = useRouter();
   const token = useSelector((state: any) => state.authUser.token);
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
-  const { socket, isConnected } = useSocket();
+  const { socket, isConnected, onlineUsers } = useSocket();
 
   useEffect(() => {
     if (token && currentUser) {
@@ -87,10 +87,7 @@ const ChatPage: NextPage = () => {
 
   useEffect(() => {
     if (socket && selectedChat) {
-      // Join chat room
       socket.emit('join_chat', selectedChat._id);
-
-      // Listen for new messages
       socket.on('new_message', handleNewMessage);
       socket.on('message_sent', handleMessageSent);
       socket.on('user_typing', handleUserTyping);
@@ -112,6 +109,7 @@ const ChatPage: NextPage = () => {
     scrollToBottom();
   }, [messages]);
 
+
   const fetchChats = async () => {
     try {
       setLoading(true);
@@ -132,7 +130,6 @@ const ChatPage: NextPage = () => {
       const { data } = await getChatMessages(chatId, {}, token);
       if (data.success) {
         setMessages(data.data);
-        // Mark messages as read
         await markMessagesAsRead(chatId, token);
       }
     } catch (error) {
@@ -147,25 +144,26 @@ const ChatPage: NextPage = () => {
     fetchMessages(chat._id);
   };
 
+  // Helper function to check if a user is online
+  const isUserOnline = (userId: string) => {
+    return onlineUsers.some((onlineUser) => onlineUser.userId === userId);
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedChat || sendingMessage) return;
 
     try {
       setSendingMessage(true);
-      
-      // Send message via API
       const { data } = await sendMessage(selectedChat._id, {
         content: newMessage.trim(),
         messageType: 'text'
       }, token);
 
       if (data.success) {
-        // Add message to local state
         setMessages(prev => [...prev, data.data]);
         setNewMessage("");
         
-        // Emit via socket for real-time updates
         if (socket) {
           socket.emit('send_message', {
             chatId: selectedChat._id,
@@ -174,7 +172,6 @@ const ChatPage: NextPage = () => {
           });
         }
 
-        // Update chat list with new last message
         setChats(prev => prev.map(chat => 
           chat._id === selectedChat._id 
             ? { ...chat, lastMessage: data.data, lastMessageAt: data.data.createdAt }
@@ -192,7 +189,7 @@ const ChatPage: NextPage = () => {
   const handleNewMessage = (messageData: any) => {
     if (messageData.chatId === selectedChat?._id) {
       setMessages(prev => [...prev, {
-        _id: Date.now().toString(), // Temporary ID
+        _id: Date.now().toString(),
         content: messageData.content,
         sender: messageData.sender,
         messageType: messageData.messageType,
@@ -203,7 +200,6 @@ const ChatPage: NextPage = () => {
       }]);
     }
 
-    // Update chat list
     setChats(prev => prev.map(chat => 
       chat._id === messageData.chatId 
         ? { 
@@ -221,7 +217,6 @@ const ChatPage: NextPage = () => {
   };
 
   const handleMessageSent = (messageData: any) => {
-    // Handle confirmation that message was sent
     console.log('Message sent confirmation:', messageData);
   };
 
@@ -244,7 +239,6 @@ const ChatPage: NextPage = () => {
   };
 
   const handleMessageRead = (data: any) => {
-    // Handle message read status updates
     console.log('Message read:', data);
   };
 
@@ -257,12 +251,10 @@ const ChatPage: NextPage = () => {
         socket.emit('typing_start', { chatId: selectedChat._id });
       }
 
-      // Clear existing timeout
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
 
-      // Set new timeout
       typingTimeoutRef.current = setTimeout(() => {
         setIsTyping(false);
         socket.emit('typing_stop', { chatId: selectedChat._id });
@@ -282,14 +274,12 @@ const ChatPage: NextPage = () => {
         setShowDeleteConfirm(null);
         setShowChatMenu(null);
         
-        // If the deleted chat was selected, clear selection
         if (selectedChat?._id === chatId) {
           setSelectedChat(null);
           setMessages([]);
           setShowMobileChat(false);
         }
         
-        // Refresh chat list
         fetchChats();
       }
     } catch (error) {
@@ -305,14 +295,12 @@ const ChatPage: NextPage = () => {
         toast.success("Chat archived successfully");
         setShowChatMenu(null);
         
-        // If the archived chat was selected, clear selection
         if (selectedChat?._id === chatId) {
           setSelectedChat(null);
           setMessages([]);
           setShowMobileChat(false);
         }
         
-        // Refresh chat list
         fetchChats();
       }
     } catch (error) {
@@ -336,7 +324,7 @@ const ChatPage: NextPage = () => {
         minute: '2-digit',
         hour12: true 
       });
-    } else if (diffInHours < 168) { // 7 days
+    } else if (diffInHours < 168) {
       return date.toLocaleDateString('en-US', { weekday: 'short' });
     } else {
       return date.toLocaleDateString('en-US', { 
@@ -379,7 +367,7 @@ const ChatPage: NextPage = () => {
               </button>
             </div>
             
-            {/* Search */}
+            
             <div className="relative">
               <HiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
@@ -413,12 +401,10 @@ const ChatPage: NextPage = () => {
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      {/* Clickable area for chat selection */}
                       <div 
                         onClick={() => handleChatSelect(chat)}
                         className="flex items-center space-x-3 flex-1 cursor-pointer"
                       >
-                        {/* Profile Image */}
                         <div className="relative">
                           <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                             {otherParticipant?.userProfileImage?.url ? (
@@ -433,12 +419,11 @@ const ChatPage: NextPage = () => {
                               </span>
                             )}
                           </div>
-                          {isConnected && (
+                          {isUserOnline(otherParticipant?._id) && (
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                           )}
                         </div>
 
-                        {/* Chat Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <h3 className="font-medium text-gray-900 truncate">
@@ -466,13 +451,11 @@ const ChatPage: NextPage = () => {
                           </p>
                         </div>
 
-                        {/* Unread indicator */}
                         {isUnread && (
                           <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                         )}
                       </div>
 
-                      {/* Chat Menu Button */}
                       <div className="relative">
                         <button
                           onClick={(e) => {
@@ -484,11 +467,14 @@ const ChatPage: NextPage = () => {
                           <HiDotsVertical className="h-4 w-4 text-gray-600" />
                         </button>
 
-                        {/* Chat Menu Dropdown */}
                         {showChatMenu === chat._id && (
-                          <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[120px]">
+                          <div 
+                            className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[120px]"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <button
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 handleArchiveChat(chat._id);
                               }}
@@ -499,6 +485,7 @@ const ChatPage: NextPage = () => {
                             </button>
                             <button
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 setShowDeleteConfirm(chat._id);
                                 setShowChatMenu(null);
@@ -523,7 +510,6 @@ const ChatPage: NextPage = () => {
         <div className={`${showMobileChat ? 'flex' : 'hidden md:flex'} flex-col flex-1`}>
           {selectedChat ? (
             <>
-              {/* Chat Header */}
               <div className="p-4 border-b border-gray-200 bg-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -535,20 +521,28 @@ const ChatPage: NextPage = () => {
                     </button>
                     
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <div className="relative">
+                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                          {(() => {
+                            const otherParticipant = getOtherParticipant(selectedChat);
+                            return otherParticipant?.userProfileImage?.url ? (
+                              <img
+                                src={otherParticipant.userProfileImage.url}
+                                alt={otherParticipant.fname}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-gray-600 font-semibold">
+                                {otherParticipant?.fname?.charAt(0)}{otherParticipant?.lname?.charAt(0)}
+                              </span>
+                            );
+                          })()}
+                        </div>
                         {(() => {
                           const otherParticipant = getOtherParticipant(selectedChat);
-                          return otherParticipant?.userProfileImage?.url ? (
-                            <img
-                              src={otherParticipant.userProfileImage.url}
-                              alt={otherParticipant.fname}
-                              className="w-10 h-10 rounded-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-gray-600 font-semibold">
-                              {otherParticipant?.fname?.charAt(0)}{otherParticipant?.lname?.charAt(0)}
-                            </span>
-                          );
+                          return isUserOnline(otherParticipant?._id) ? (
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                          ) : null;
                         })()}
                       </div>
                       
@@ -590,7 +584,6 @@ const ChatPage: NextPage = () => {
                 </div>
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => {
                   const isOwnMessage = message.sender._id === currentUser._id;
@@ -647,7 +640,6 @@ const ChatPage: NextPage = () => {
                   );
                 })}
 
-                {/* Typing indicator */}
                 {typingUsers.length > 0 && (
                   <div className="flex justify-start">
                     <div className="flex items-end space-x-2">
@@ -668,7 +660,6 @@ const ChatPage: NextPage = () => {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Message Input */}
               <div className="p-4 border-t border-gray-200 bg-white">
                 <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
                   <button
@@ -721,7 +712,7 @@ const ChatPage: NextPage = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[9999]">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div className="mt-3 text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">

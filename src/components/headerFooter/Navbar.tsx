@@ -18,24 +18,51 @@ const Navbar: NextPage = () => {
   const [postModal, setPostModal] = useState(false);
   const [profileUrl, setProfileUrl] = useState();
 
-  const [authUser, setAuthUser] = useState();
+  const [authUser, setAuthUser] = useState(false);
   //check whether the user is logged in or not if logged in and isAuthenticated is true
   const userAuth = useSelector((state: any) => state.authUser.isAuthenticated);
+  const token = useSelector((state: any) => state.authUser.token);
+  
   useEffect(() => {
-    setAuthUser(userAuth);
-  });
+    // Check both Redux state and localStorage for authentication
+    const reduxAuth = userAuth && token && token.trim() !== '';
+    const localAuth = typeof window !== 'undefined' && 
+      localStorage.getItem("user") && 
+      localStorage.getItem("token");
+    
+    const isAuthenticated = reduxAuth || localAuth;
+    console.log('Navbar Auth Check:', { 
+      userAuth, 
+      token: token ? 'exists' : 'missing', 
+      reduxAuth,
+      localAuth,
+      isAuthenticated 
+    });
+    setAuthUser(isAuthenticated);
+  }, [userAuth, token]);
 
   // get user from local Storage to get profile url
   // why from local storage -> to stop whole website rerendering
-  const user =
-  userAuth &&  typeof window !== "undefined" &&
-    JSON.parse(window.localStorage.getItem("user") || "");
-  // console.log(user?.userProfileImage?.url);
+  const user = authUser && typeof window !== "undefined" 
+    ? JSON.parse(window.localStorage.getItem("user") || "{}")
+    : null;
+  
   const getProfileUrl = user?.userProfileImage?.url;
 
   useEffect(() => {
-    setProfileUrl(getProfileUrl);
-  });
+    if (authUser && getProfileUrl) {
+      setProfileUrl(getProfileUrl);
+    } else {
+      setProfileUrl(null);
+    }
+  }, [authUser, getProfileUrl]);
+
+  // Close profile dropdown when user logs out
+  useEffect(() => {
+    if (!authUser) {
+      setShowProfileDropdown(false);
+    }
+  }, [authUser]);
 
   const router = useRouter();
   const profileDropdownBtnRef = useRef(null);
@@ -125,8 +152,8 @@ const Navbar: NextPage = () => {
 
   return (
     <>
-      {/* <div className="fixed top-0 left-0 right-0 z-40"> */}
-      <div className="relative">
+      <div className="fixed top-0 left-0 right-0 z-40">
+      {/* <div className="relative"> */}
 
         {/* Glassy navbar */}
         <nav className="backdrop-blur-sm bg-white/60 border-b border-gray-200">
@@ -250,7 +277,7 @@ const Navbar: NextPage = () => {
                       <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white rounded-full" style={{ background: brand }}>3</span>
                     </div> */}
 
-                    <div>
+                    <div className="z-[999]">
                       <button
                         ref={profileDropdownBtnRef}
                         className={`flex ml-2 rounded-full p-1.5 text-sm focus:outline-none border border-gray-200 shadow transition ${showProfileDropdown ? 'ring-2 ring-orange-300 bg-white/90 shadow-lg' : 'bg-white/80 hover:shadow-lg'}`}

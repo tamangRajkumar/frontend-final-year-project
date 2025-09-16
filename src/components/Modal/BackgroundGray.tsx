@@ -33,7 +33,7 @@ const BackgroundGray = ({
                 height: "1000%",
               }
         }
-        className="cursor-default z-30 bg-gray-500 opacity-70  top-4 "
+        className="cursor-default z-[9998] bg-gray-500 opacity-70  top-4 "
       ></button>
     </>
   );

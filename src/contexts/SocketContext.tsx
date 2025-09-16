@@ -2,14 +2,23 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useSelector } from 'react-redux';
 
+interface OnlineUser {
+  userId: string;
+  user: any;
+  socketId: string;
+  connectedAt: Date;
+}
+
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
+  onlineUsers: OnlineUser[];
 }
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
   isConnected: false,
+  onlineUsers: [],
 });
 
 export const useSocket = () => {
@@ -27,6 +36,7 @@ interface SocketProviderProps {
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const token = useSelector((state: any) => state.authUser.token);
   const currentUser = useSelector((state: any) => state.authUser.currentUser);
 
@@ -55,6 +65,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setIsConnected(false);
       });
 
+      // Listen for online users updates
+      newSocket.on('online_users', (users: OnlineUser[]) => {
+        setOnlineUsers(users);
+      });
+
       setSocket(newSocket);
 
       return () => {
@@ -73,8 +88,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [token, currentUser]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={{ socket, isConnected, onlineUsers }}>
       {children}
     </SocketContext.Provider>
   );
 };
+
+

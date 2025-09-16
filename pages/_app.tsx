@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import { useRouter } from "next/router";
 import "../styles/globals.css";
 
 //Tostify notification
@@ -36,16 +37,27 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Provider store={store}>
         <SocketProvider>
-          <div className="bg-gray-50">
-            <Navbar />
-            <Component {...pageProps} />
-            <ToastContainer position="bottom-right" />
-          
-            < Footer />
-          </div>
+          <AppContent Component={Component} pageProps={pageProps} />
         </SocketProvider>
       </Provider>
     </>
+  );
+}
+
+function AppContent({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  
+  // Check if current page is chat page
+  const isChatPage = router.pathname === '/chat';
+
+  return (
+    <div className="bg-gray-50">
+      <Navbar />
+      <Component {...pageProps} />
+      <ToastContainer position="bottom-right" />
+      
+      {!isChatPage && <Footer />}
+    </div>
   );
 }
 

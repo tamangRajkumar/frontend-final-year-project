@@ -85,7 +85,7 @@ s
     */}
           <div
             ref={dropdownRef}
-            className="absolute right-0 bottom-[-7rem] z-50 mt-2 w-56 origin-top-right rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 py-1 shadow-lg focus:outline-none transform transition-all duration-150 ease-out"
+            className="dropDownMenu absolute right-0 bottom-[-7rem] z-50 mt-2 w-56 origin-top-right rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 py-1 shadow-lg focus:outline-none transform transition-all duration-150 ease-out"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu-button"
@@ -96,7 +96,7 @@ s
             {authUser
               ? // If user is logged in dropdown for user
                 ProfileDropdownDataLoggedIn.map((data, idx) => (
-                  <div key={data.name}>
+                  <div key={data.name} className="z-50">
                     <Link href={data.link}>
                       <a
                         onClick={() => onClose && onClose()}
@@ -116,7 +116,7 @@ s
                 ))
               : // if user is not logged in dropdown for user
                 ProfileDropdownDataNotLoggedIn.map((data) => (
-                  <div key={data.name}>
+                  <div key={data.name} className="z-50">
                     <Link href={data.link}>
                       <a
                         onClick={() => onClose && onClose()}

@@ -753,3 +753,4 @@ const BusinessesTable: NextPage = () => {
 };
 
 export default BusinessesTable;
+

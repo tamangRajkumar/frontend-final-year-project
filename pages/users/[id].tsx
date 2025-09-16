@@ -377,3 +377,4 @@ const UserDetail: NextPage = () => {
 };
 
 export default UserDetail;
+

@@ -5,7 +5,9 @@ import axios from "axios";
 const initialState = {
   // isAuthenticated: false,
 
-  isAuthenticated: (typeof window !== 'undefined') && localStorage.getItem("user") ? true : false,
+  isAuthenticated: (typeof window !== 'undefined') && 
+    localStorage.getItem("user") && 
+    localStorage.getItem("token") ? true : false,
   //After registered backend will send ok:true token and user data that will be stored herer
   token:(typeof window !== 'undefined') && localStorage.getItem("token")
   ? localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1') || ''

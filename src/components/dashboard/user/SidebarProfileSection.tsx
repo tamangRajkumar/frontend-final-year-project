@@ -84,7 +84,7 @@ const SidebarProfileSection = ({ userData }: any) => {
             </p>
           </div>
 
-          <div className="mt-10">
+          {/* <div className="mt-10">
             <p className="font-bold">My Favorite Places</p>
             <div>
               <p>
@@ -97,7 +97,7 @@ const SidebarProfileSection = ({ userData }: any) => {
                 <span>#</span>USA
               </p>
             </div>
-          </div>
+          </div> */}
 
           {/* <div className="mt-10">
         <p className="font-bold">Hobbies</p>

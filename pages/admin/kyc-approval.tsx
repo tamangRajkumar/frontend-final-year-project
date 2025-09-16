@@ -488,3 +488,4 @@ const KYCApproval: NextPage = () => {
 };
 
 export default KYCApproval;
+
