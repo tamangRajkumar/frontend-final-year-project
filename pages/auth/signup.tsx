@@ -81,14 +81,14 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10 mt-16">
       <AnimatedAuthBg />
 
       <div className="w-full max-w-4xl">
         <div className="bg-white/80 border border-gray-200 rounded-3xl p-8 shadow-lg">
           <div className="text-center mb-6">
             <div className="mx-auto w-20 h-20">
-              <Logo size={64} />
+              <Logo size={64} hideBranchName />
             </div>
             <h2 className="mt-4 text-2xl font-bold text-gray-900">Create your account</h2>
             <p className="text-sm text-gray-600">Join founders, post proposals, and find your match.</p>
