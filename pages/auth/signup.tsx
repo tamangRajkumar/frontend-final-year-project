@@ -13,6 +13,7 @@ import AnimatedAuthBg from "../../src/components/common/AnimatedAuthBg";
 import SocialButtons from "../../src/components/auth/SocialButtons";
 import Logo from "../../src/components/headerFooter/Logo";
 import FileUpload from "../../src/components/common/FileUpload";
+import { HiRefresh } from "react-icons/hi";
 
 const Signup: NextPage = () => {
   const [countries, setCountries] = useState<any[]>([]);
@@ -295,8 +296,15 @@ console.log({errors})
 
 
             <div className="md:col-span-2">
-              <button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-3 font-semibold text-white shadow-lg" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
-                {isSubmitting ? 'Signing up...' : 'Create account'}
+              <button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-3 font-semibold text-white shadow-lg flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
+                {isSubmitting ? (
+                  <>
+                    <HiRefresh className="h-5 w-5 animate-spin" />
+                    <span>Signing up...</span>
+                  </>
+                ) : (
+                  'Create account'
+                )}
               </button>
             </div>
 
