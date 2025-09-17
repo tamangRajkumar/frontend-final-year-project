@@ -469,7 +469,7 @@ const ProposalsPage: NextPage = () => {
                             onClick={() => router.push(`/proposals/${proposal._id}`)}
                             className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                           >
-                            View Details
+                            View
                           </button>
                           {currentUser?.role === 'admin' && (
                             <button
