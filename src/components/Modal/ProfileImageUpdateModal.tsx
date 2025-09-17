@@ -29,7 +29,7 @@ const ProfileImageUpdateModal: NextPage = ({
   const router = useRouter();
   const dispatch: any = useDispatch();
 
-  // console.log(postSubmitData.description)
+  // // console.log(postSubmitData.description)
 
   // get token from state
   const token = useSelector((state: any) => state.authUser.token);
@@ -44,31 +44,31 @@ const ProfileImageUpdateModal: NextPage = ({
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append("image", file);
-    // console.log([...formData]);
+    // // console.log([...formData]);
     try {
       const { data } = await uploadImage(formData, token);
-      // console.log(data);
+      // // console.log(data);
       setPostSubmitData({ ...postSubmitData, userProfileImage: data });
-      // console.log(postSubmitData.image);
+      // // console.log(postSubmitData.image);
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
     }
   };
 
   // handle Profile update
   const handleUpdateProfile = async (e: any) => {
     e.preventDefault();
-    // console.log("clicked");
-    // console.log(postId);
+    // // console.log("clicked");
+    // // console.log(postId);
 
     try {
       const { data } = await updateUserProfile(postSubmitData, token);
-      console.log(data);
+      // console.log(data);
       if (data.profileImageUpdate == "true") {
         setProfileImageUpdateModal(false);
         const user = data.user;
-        // console.log(user);
-        // console.log(data.userProfileImageData);
+        // // console.log(user);
+        // // console.log(data.userProfileImageData);
         toast.success("Your profile image is updated");
         router.push("/dashboard/user");
 
@@ -77,7 +77,7 @@ const ProfileImageUpdateModal: NextPage = ({
         // dispatch(authUser(userProfileImageData))
       }
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
     }
   };
 

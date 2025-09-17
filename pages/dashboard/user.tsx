@@ -67,14 +67,14 @@ const User: NextPage = () => {
     try {
       const { data } = await fetchPosts(token);
       setUserPosts(data);
-      console.log(data);
-      // console.log(data[1]._id);
+      // console.log(data);
+      // // console.log(data[1]._id);
 
       {
-        // posts && console.log(posts[0]._id);
+        // posts && // console.log(posts[0]._id);
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // console.log("Error => ", error);
     }
   };
 
@@ -86,30 +86,30 @@ const User: NextPage = () => {
   // Handle Post liked by user
   const handlePostLiked = async (postId: any) => {
     try {
-      // console.log(postId)
+      // // console.log(postId)
       const { data } = await postLiked(postId, token);
-      console.log(data);
+      // console.log(data);
       if (data.postLiked) {
         getUserPosts();
         toast.success("Post Liked");
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // console.log("Error => ", error);
     }
   };
 
   //Handle Post unliked by user
   const handlePostUnliked = async (postId: any) => {
     try {
-      console.log(postId);
+      // console.log(postId);
       const { data } = await postUnliked(postId, token);
-      // console.log(data);
+      // // console.log(data);
       if (data.postUnliked) {
         getUserPosts();
         toast.success("Post Unliked");
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // console.log("Error => ", error);
     }
   };
 

@@ -20,23 +20,23 @@ const IndividualPost: NextPage = () => {
   const router = useRouter();
   const postOptionsButtonRef = useRef(null);
 
-  // console.log(router.query._id)
+  // // console.log(router.query._id)
   const postId = router.query._id;
-  // console.log(postId)
+  // // console.log(postId)
 
   const [post, setPost] = useState<any>();
-console.log({post})
+// console.log({post})
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
   // Get comments data
   const [postCommentsData, setPostCommentsData] = useState();
-  // postCommentsData && console.log(postCommentsData[0])
+  // postCommentsData && // console.log(postCommentsData[0])
 
   // Comments state
   const [addComment, setAddComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
-  console.log(addComment);
+  // console.log(addComment);
 
   // Get Token from state
   const token = useSelector((state: any) => state?.authUser?.token);
@@ -54,16 +54,16 @@ console.log({post})
   // Fetch individual post by its id
   const fetchPosts = async () => {
     try {
-      // console.log(postId)
+      // // console.log(postId)
       const { data } = await fetchIndividualPost(postId);
-      // console.log("Fetch posts called");
+      // // console.log("Fetch posts called");
 
-      data && console.log(data?.data.comments);
+      data && // console.log(data?.data.comments);
       setPost(data?.data);
-      console.log(data);
+      // console.log(data);
       setPostCommentsData(data?.data?.comments);
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
     }
   };
 
@@ -77,7 +77,7 @@ console.log({post})
     setIsSubmittingComment(true);
     try {
       const { data } = await postCommentSubmit(addComment, postId, token);
-      console.log("Comment submission response:", data);
+      // console.log("Comment submission response:", data);
       
       if (data.success) {
         // Refetch the post to get updated comments
@@ -88,7 +88,7 @@ console.log({post})
         toast.error(data.message || "Failed to post comment");
       }
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
       toast.error("Failed to post comment");
     } finally {
       setIsSubmittingComment(false);
@@ -99,10 +99,10 @@ console.log({post})
   // const fetchCommentsOnly = async () => {
   //   try {
   //     const { data } = await fetchPostCommentsDataOnly(postId, token);
-  //     // console.log(data)
+  //     // // console.log(data)
   //     setPostCommentsData(data);
   //   } catch (error) {
-  //     console.log("Error=> ", error);
+  //     // console.log("Error=> ", error);
   //   }
   // };
 
@@ -116,7 +116,7 @@ console.log({post})
       const commentId = commentData._id;
       
       const { data } = await deletePostComment(postId, commentId, token);
-      console.log("Delete comment response:", data);
+      // console.log("Delete comment response:", data);
       
       if (data.postCommentDeleted == "true") {
         // Refetch the post to get updated comments
@@ -126,7 +126,7 @@ console.log({post})
         toast.error("Failed to delete comment");
       }
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
       toast.error("Failed to delete comment");
     }
   };
@@ -135,11 +135,11 @@ console.log({post})
   // useEffect(() => {
   //   const closePostOptionsDropdownOnClick = (e: any) => {
   //     // setIsMobileViewDropdown(false)
-  //     // console.log(e.path[1]);
-  //     // console.log(profileDropdownBtnRef.current)
+  //     // // console.log(e.path[1]);
+  //     // // console.log(profileDropdownBtnRef.current)
   //     if (e.path[1] !== postOptionsButtonRef.current) {
   //       setShowOptionsDropdown(false);
-  //       // console.log(e);
+  //       // // console.log(e);
   //     }
   //   };
   //   document.body.addEventListener("click", closePostOptionsDropdownOnClick);

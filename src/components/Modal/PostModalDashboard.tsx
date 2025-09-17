@@ -29,7 +29,7 @@ const PostModalDashboard: NextPage = ({
 
   const router = useRouter();
 
-  // console.log(postSubmitData.description)
+  // // console.log(postSubmitData.description)
 
   // get token from state
   const token = useSelector((state: any) => state.authUser.token);
@@ -39,14 +39,14 @@ const PostModalDashboard: NextPage = ({
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append("image", file);
-    // console.log([...formData]);
+    // // console.log([...formData]);
     try {
       const { data } = await uploadImage(formData, token);
-      // console.log(data);
+      // // console.log(data);
       setPostSubmitData({ ...postSubmitData, image: data });
-      // console.log(postSubmitData.image);
+      // // console.log(postSubmitData.image);
     } catch (error) {
-      console.log("Error=> ", error);
+      // console.log("Error=> ", error);
       
     }
   };
@@ -56,12 +56,12 @@ const PostModalDashboard: NextPage = ({
     e.preventDefault();
     try {
       const { data } = await postSubmit(postSubmitData, token);
-      // console.log(postSubmitData);
-      // console.log(token);
-      console.log(data);
+      // // console.log(postSubmitData);
+      // // console.log(token);
+      // console.log(data);
 
       if (data.saved == "true") {
-        console.log("Called");
+        // console.log("Called");
 
         toast.success("Your Post is created successfully");
         setPostModal(false);
@@ -69,7 +69,7 @@ const PostModalDashboard: NextPage = ({
         router.push("/dashboard/user");
       }
     } catch (error) {
-      console.log("Error =>", error);
+      // console.log("Error =>", error);
     }
   };
 

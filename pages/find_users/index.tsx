@@ -6,7 +6,7 @@ import { fetchAllUsers } from "../api";
 const FindUsers = () => {
 
     const[users, setUsers] = useState();
- users && console.log(users)
+ users && // console.log(users)
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -14,7 +14,7 @@ const FindUsers = () => {
   //find users
   const getAllUsers = async () => {
     const { data } = await fetchAllUsers();
-    console.log(data);
+    // console.log(data);
     setUsers(data);
   };
 

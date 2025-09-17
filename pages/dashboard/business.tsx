@@ -101,12 +101,9 @@ const Business: NextPage = () => {
       const { data } = await getPostsByUser(currentUser._id, {}, token);
       if (data.success) {
         setUserPosts(data.data);
-        console.log("User posts:", data.data);
-      } else {
-        console.log("Error fetching user posts:", data.message);
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // Error fetching user posts
     }
   };
 
@@ -121,23 +118,18 @@ const Business: NextPage = () => {
         setBusinessProposals(data.data);
       }
     } catch (error) {
-      console.log("Error fetching business proposals:", error);
+      // Error fetching business proposals
     }
   };
 
   const getBusinessEvents = async () => {
     try {
-      console.log("Fetching business events for user:", currentUser._id);
       const { data } = await getEventsByOrganizer(currentUser._id, {}, token);
-      console.log("Business events response:", data);
       if (data.success) {
-        console.log("Setting business events:", data.data);
         setBusinessEvents(data.data);
-      } else {
-        console.log("Business events fetch failed:", data.message);
       }
     } catch (error) {
-      console.log("Error fetching business events:", error);
+      // Error fetching business events
     }
   };
 
@@ -166,27 +158,27 @@ const Business: NextPage = () => {
   const handlePostLiked = async (postId: any) => {
     try {
       const { data } = await postLiked(postId, token);
-      console.log(data);
+      // console.log(data);
       if (data.postLiked) {
         getUserPosts();
         toast.success("Post Liked");
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // console.log("Error => ", error);
     }
   };
 
   //Handle Post unliked by user
   const handlePostUnliked = async (postId: any) => {
     try {
-      console.log(postId);
+      // console.log(postId);
       const { data } = await postUnliked(postId, token);
       if (data.postUnliked) {
         getUserPosts();
         toast.success("Post Unliked");
       }
     } catch (error) {
-      console.log("Error => ", error);
+      // console.log("Error => ", error);
     }
   };
 
@@ -598,7 +590,7 @@ const Business: NextPage = () => {
                     </button>
                   </div>
 
-                  {console.log(
+                  {// console.log(
                     "Rendering events section, businessEvents:",
                     businessEvents,
                     "Length:",

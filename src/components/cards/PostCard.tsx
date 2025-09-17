@@ -15,13 +15,13 @@ const PostCard = ({ userPosts, handlePostLiked, handlePostUnliked }: any) => {
 
   // Get user Id from state
   const userId = useSelector((state: any) => state?.authUser?.currentUser?._id);
-  // console.log(userId)
+  // // console.log(userId)
 
   const handleOptionsDropdown = () => {
     setShowOptionsDropdown((prev) => !prev);
   };
 
-  console.log(userPosts);
+  // console.log(userPosts);
 
   const postOptionsBtnRef = useRef(null);
 
@@ -29,11 +29,11 @@ const PostCard = ({ userPosts, handlePostLiked, handlePostUnliked }: any) => {
   useEffect(() => {
     const closePostOptionsDropdownOnClick = (e: any) => {
       // setIsMobileViewDropdown(false)
-      // console.log(e.path[1]);
-      // console.log(profileDropdownBtnRef.current)
+      // // console.log(e.path[1]);
+      // // console.log(profileDropdownBtnRef.current)
       if (e?.path?.[1] !== postOptionsBtnRef.current) {
         setShowOptionsDropdown(false);
-        // console.log(e);
+        // // console.log(e);
       }
     };
     document.body.addEventListener("click", closePostOptionsDropdownOnClick);

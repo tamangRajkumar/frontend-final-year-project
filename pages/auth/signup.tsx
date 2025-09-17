@@ -37,7 +37,7 @@ const Signup: NextPage = () => {
   } = useForm<SignupFormData>({ resolver: zodResolver(signupSchema) });
 
   const selectedRole = watch("role");
-console.log({errors})
+
   const onSubmit = async (data: SignupFormData) => {
     try {
       const signUpData = {
@@ -59,7 +59,6 @@ console.log({errors})
         toast.success("Successfully signed up! You can now verify your KYC in settings.");
       }
     } catch (error) {
-      console.log(error);
       toast.error("Sign Up failed, Please try again!");
     }
   };
@@ -73,7 +72,7 @@ console.log({errors})
       const { data } = await countriesData();
       setCountries(data?.data || []);
     } catch (error) {
-      console.log("Error=>", error);
+      // Error fetching countries data
     }
   };
 

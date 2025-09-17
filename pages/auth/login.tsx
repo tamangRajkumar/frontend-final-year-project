@@ -10,6 +10,7 @@ import { loginSchema, LoginFormData } from "../../src/validation/schemas";
 import AnimatedAuthBg from "../../src/components/common/AnimatedAuthBg";
 import SocialButtons from "../../src/components/auth/SocialButtons";
 import Logo from "../../src/components/headerFooter/Logo";
+import { HiRefresh } from "react-icons/hi";
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -111,8 +112,15 @@ const Login: NextPage = () => {
 
               <div>
                 <button type="submit" disabled={isSubmitting}
-                  className="w-full rounded-xl py-3 font-semibold text-white shadow-lg" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
-                  {isSubmitting ? 'Logging in...' : 'Log in'}
+                  className="w-full rounded-xl py-3 font-semibold text-white shadow-lg flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
+                  {isSubmitting ? (
+                    <>
+                      <HiRefresh className="h-5 w-5 animate-spin" />
+                      <span>Logging in...</span>
+                    </>
+                  ) : (
+                    'Log in'
+                  )}
                 </button>
               </div>
 

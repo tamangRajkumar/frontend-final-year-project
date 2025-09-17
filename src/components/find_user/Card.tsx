@@ -7,7 +7,7 @@ const Card = ({ users }: any) => {
 
   //hanlde user profile view
   const handleUserProfileView = (userId: any) => {
-    console.log(userId);
+    // console.log(userId);
   };
 
   return (

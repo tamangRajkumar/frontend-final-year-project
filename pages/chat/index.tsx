@@ -218,7 +218,7 @@ const ChatPage: NextPage = () => {
   };
 
   const handleMessageSent = (messageData: any) => {
-    console.log('Message sent confirmation:', messageData);
+    // console.log('Message sent confirmation:', messageData);
   };
 
   const handleUserTyping = (data: any) => {
@@ -240,7 +240,7 @@ const ChatPage: NextPage = () => {
   };
 
   const handleMessageRead = (data: any) => {
-    console.log('Message read:', data);
+    // console.log('Message read:', data);
   };
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {

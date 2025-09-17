@@ -58,15 +58,12 @@ const SearchPage: NextPage = () => {
     
     setLoading(true);
     try {
-      console.log("Performing search for:", query);
       const [usersRes, postsRes, businessesRes, eventsRes] = await Promise.all([
         searchUsers(query, token),
         searchPosts(query, token),
         searchBusinesses(query, token),
         searchEvents(query, token)
       ]);
-
-      console.log("Search responses:", { usersRes, postsRes, businessesRes, eventsRes });
 
       const results: SearchResult = {
         users: usersRes.data.success ? usersRes.data.data : [],
@@ -75,7 +72,6 @@ const SearchPage: NextPage = () => {
         events: eventsRes.data.success ? eventsRes.data.data : []
       };
 
-      console.log("Processed results:", results);
       setSearchResults(results);
     } catch (error) {
       console.error("Search error:", error);
@@ -86,7 +82,6 @@ const SearchPage: NextPage = () => {
   };
 
   const applyFilters = () => {
-    console.log("Applying filters to:", searchResults);
     let filtered = { ...searchResults };
 
     // Filter by role
@@ -114,7 +109,6 @@ const SearchPage: NextPage = () => {
       filtered.events.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     }
 
-    console.log("Filtered results:", filtered);
     setFilteredResults(filtered);
   };
 

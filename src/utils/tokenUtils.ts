@@ -52,9 +52,9 @@ export const isTokenClean = (token: string | null | undefined): boolean => {
 export const forceTokenCleanup = (): void => {
   if (typeof window === 'undefined') return;
   
-  console.log("🧹 Forcing token cleanup...");
+  // console.log("🧹 Forcing token cleanup...");
   localStorage.clear();
-  console.log("✅ localStorage cleared, reloading page...");
+  // console.log("✅ localStorage cleared, reloading page...");
   window.location.reload();
 };
 

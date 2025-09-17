@@ -32,13 +32,6 @@ const Navbar: NextPage = () => {
       localStorage.getItem("token");
     
     const isAuthenticated = reduxAuth || localAuth;
-    console.log('Navbar Auth Check:', { 
-      userAuth, 
-      token: token ? 'exists' : 'missing', 
-      reduxAuth,
-      localAuth,
-      isAuthenticated 
-    });
     setAuthUser(isAuthenticated);
   }, [userAuth, token]);
 

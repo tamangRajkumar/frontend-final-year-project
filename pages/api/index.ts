@@ -141,7 +141,7 @@ export const fetchPosts = (token: string) => {
 
 //Get individual post
 export const fetchIndividualPost = (postId: any) => {
-  console.log(postId);
+  // console.log(postId);
   return axios.get(`/posts/${postId}`);
 };
 

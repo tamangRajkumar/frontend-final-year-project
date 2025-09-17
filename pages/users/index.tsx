@@ -46,14 +46,9 @@ const UsersList: NextPage = () => {
     // Get clean token from Redux or localStorage
     const authToken = getCleanToken(token);
     
-    console.log("Redux token:", token);
-    console.log("Clean token:", authToken);
-    
     if (authToken) {
-      console.log("Using clean token for users API:", authToken);
       fetchUsers();
     } else {
-      console.log("No valid token found, redirecting to login");
       router.push("/auth/login");
     }
   }, [token, filters]);
@@ -70,7 +65,6 @@ const UsersList: NextPage = () => {
 
       // Use the clean token
       const authToken = getCleanToken(token);
-      console.log("Using token for API call:", authToken);
       
       const { data } = await getUsersList(params, authToken);
       

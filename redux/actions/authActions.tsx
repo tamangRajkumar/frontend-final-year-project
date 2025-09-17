@@ -56,7 +56,7 @@ export const logInUser =
         }
       }
     } catch (error) {
-      console.log("ERROR=> ", error);
+      // console.log("ERROR=> ", error);
       toast.error(error?.response?.data);
     }
   };

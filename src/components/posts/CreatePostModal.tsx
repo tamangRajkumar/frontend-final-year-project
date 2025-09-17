@@ -67,8 +67,8 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
     setValue: setProposalValue,
     formState: { errors },
   } = proposalForm;
-  console.log({ errors });
-  console.log("Form",getValues())
+  // console.log({ errors });
+  // console.log("Form",getValues())
 
   // Sync local state with form values
   useEffect(() => {
