@@ -16,7 +16,10 @@ import { cleanToken } from "../src/utils/tokenUtils";
 
 function MyApp({ Component, pageProps }: AppProps) {
   //axios configuration
-  axios.defaults.baseURL = "http://localhost:9000/api";
+  // axios.defaults.baseURL = "http://localhost:9000/api";
+  //https://backend-final-year-project-q91n.onrender.com
+  axios.defaults.baseURL = "https://backend-final-year-project-q91n.onrender.com/api";
+
 
   // Add request interceptor to clean tokens
   axios.interceptors.request.use((config) => {

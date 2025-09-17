@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { HiPlus, HiX, HiPencil, HiCheck, HiXMark, HiStar, HiLightningBolt } from "react-icons/hi";
-import { getGoalsAndSkills, updateGoalsAndSkills } from "../api";
+import { HiPlus, HiX, HiPencil, HiCheck, HiStar, HiLightningBolt } from "react-icons/hi";
+import { getGoalsAndSkills, updateGoalsAndSkills } from "./api";
 import { toast } from "react-toastify";
 
 const GoalsSkillsDemo: NextPage = () => {
@@ -199,7 +199,7 @@ const GoalsSkillsDemo: NextPage = () => {
                         onClick={cancelEditing}
                         className="p-2 text-red-600 hover:bg-red-100 rounded-lg"
                       >
-                        <HiXMark className="h-5 w-5" />
+                        <HiX className="h-5 w-5" />
                       </button>
                     </>
                   ) : (
@@ -290,7 +290,7 @@ const GoalsSkillsDemo: NextPage = () => {
                         onClick={cancelEditing}
                         className="p-2 text-red-600 hover:bg-red-100 rounded-lg"
                       >
-                        <HiXMark className="h-5 w-5" />
+                        <HiX className="h-5 w-5" />
                       </button>
                     </>
                   ) : (

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { 
   HiStar,
-  HiStarSolid,
   HiBriefcase,
   HiUsers,
   HiCalendar,
@@ -218,7 +217,7 @@ const FeaturedContentPage: NextPage = () => {
                             className="p-1 text-yellow-500 hover:text-yellow-600 transition-colors"
                             title="Remove from featured"
                           >
-                            <HiStarSolid className="h-5 w-5" />
+                            <HiStar className="h-5 w-5" />
                           </button>
                         </div>
                         
@@ -312,7 +311,7 @@ const FeaturedContentPage: NextPage = () => {
                             className="p-1 text-yellow-500 hover:text-yellow-600 transition-colors"
                             title="Remove from featured"
                           >
-                            <HiStarSolid className="h-5 w-5" />
+                            <HiStar className="h-5 w-5" />
                           </button>
                         </div>
                         

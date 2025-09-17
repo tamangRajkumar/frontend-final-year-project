@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { HiPlus, HiX, HiPencil, HiCheck, HiXMark } from "react-icons/hi";
+import { HiPlus, HiX, HiPencil, HiCheck } from "react-icons/hi";
 import SidebarSettingOptions from "../../src/components/setting/SidebarSettingOptions";
 import { getGoalsAndSkills, updateGoalsAndSkills } from "../api";
 
@@ -239,7 +239,7 @@ const ProfileSetting: NextPage = () => {
                         onClick={cancelEditing}
                         className="p-1 text-red-600 hover:bg-red-100 rounded"
                       >
-                        <HiXMark className="h-4 w-4" />
+                        <HiX className="h-4 w-4" />
                       </button>
                     </>
                   ) : (
@@ -321,7 +321,7 @@ const ProfileSetting: NextPage = () => {
                         onClick={cancelEditing}
                         className="p-1 text-red-600 hover:bg-red-100 rounded"
                       >
-                        <HiXMark className="h-4 w-4" />
+                        <HiX className="h-4 w-4" />
                       </button>
                     </>
                   ) : (

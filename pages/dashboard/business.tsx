@@ -333,7 +333,7 @@ const Business: NextPage = () => {
                 <div
                   className="flex justify-center items-center cursor-pointer"
                   onClick={handlePostModal}
-                >
+                >x
                   <input
                     type="text"
                     className="bg-white shadow-md cursor-pointer focus:outline-none rounded-2xl pl-5 py-1.5 text-gray-900 font-base"
@@ -590,12 +590,12 @@ const Business: NextPage = () => {
                     </button>
                   </div>
 
-                  {// console.log(
+                  {/* console.log(
                     "Rendering events section, businessEvents:",
                     businessEvents,
                     "Length:",
                     businessEvents?.length
-                  )}
+                  ) */}
                   {!Array.isArray(businessEvents) ? (
                     <div className="text-center py-12">
                       <HiCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
