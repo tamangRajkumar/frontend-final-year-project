@@ -208,7 +208,7 @@ const EventsPage: NextPage = () => {
   const getEventTypeColor = (type: string) => {
     switch (type) {
       case 'online':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-orange-100 text-orange-800';
       case 'offline':
         return 'bg-green-100 text-green-800';
       case 'hybrid':
@@ -230,7 +230,7 @@ const EventsPage: NextPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <HiCalendar className="h-8 w-8 mr-3 text-blue-600" />
+                <HiCalendar className="h-8 w-8 mr-3 text-orange-600" />
                 Events
               </h1>
               <p className="text-gray-600 mt-2">
@@ -265,7 +265,7 @@ const EventsPage: NextPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search events by title, description, or tags..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -273,7 +273,7 @@ const EventsPage: NextPage = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">All Categories</option>
                   {categories.map((category) => (
@@ -287,7 +287,7 @@ const EventsPage: NextPage = () => {
                 <select
                   value={selectedEventType}
                   onChange={(e) => handleEventTypeChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">All Types</option>
                   {eventTypes.map((type) => (
@@ -299,7 +299,10 @@ const EventsPage: NextPage = () => {
               </div>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                className="px-6 py-2 text-white rounded-lg transition-colors flex items-center justify-center"
+                style={{ backgroundColor: '#f26722' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#e55a1f'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#f26722'}
               >
                 <HiSearch className="h-4 w-4 mr-2" />
                 Search
@@ -311,7 +314,7 @@ const EventsPage: NextPage = () => {
         {/* Events Grid */}
         {loading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
           </div>
         ) : events.length === 0 ? (
           <div className="text-center py-12">
@@ -334,7 +337,7 @@ const EventsPage: NextPage = () => {
                   <div className="p-4 border-b border-gray-200">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
                           {event.organizer.userProfileImage?.url ? (
                             <img
                               src={event.organizer.userProfileImage.url}
@@ -342,7 +345,7 @@ const EventsPage: NextPage = () => {
                               className="w-10 h-10 rounded-full object-cover"
                             />
                           ) : (
-                            <span className="text-blue-600 font-semibold text-sm">
+                            <span className="text-orange-600 font-semibold text-sm">
                               {event.organizer.fname?.charAt(0)}{event.organizer.lname?.charAt(0)}
                             </span>
                           )}
@@ -357,17 +360,17 @@ const EventsPage: NextPage = () => {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                           {event.category}
                         </span>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getEventTypeColor(event.eventType)}`}>
                           {event.eventType}
                         </span>
-                        {event?.isFeatured && (
+                        {/* {event?.isFeatured && (
                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                             ⭐ Featured
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -395,7 +398,7 @@ const EventsPage: NextPage = () => {
                     {/* Event Details */}
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
-                        <HiCalendar className="h-4 w-4 text-blue-600 mr-2" />
+                        <HiCalendar className="h-4 w-4 text-orange-600 mr-2" />
                         <span>{formatDate(event.startDate)} - {formatDate(event.endDate)}</span>
                       </div>
                       
@@ -466,7 +469,7 @@ const EventsPage: NextPage = () => {
                     <div className="flex items-center justify-between">
                       <button
                         onClick={() => router.push(`/events/${event._id}`)}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                        className="text-orange-600 hover:text-orange-700 font-medium text-sm"
                       >
                         View Details
                       </button>
@@ -556,7 +559,7 @@ const EventsPage: NextPage = () => {
                             onClick={() => handlePageChange(page)}
                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                               page === pagination.currentPage
-                                ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                                ? 'z-10 bg-orange-50 border-orange-500 text-orange-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                             }`}
                           >

@@ -137,7 +137,7 @@ const UsersList: NextPage = () => {
       case 'admin':
         return 'bg-red-100 text-red-800';
       case 'business':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-orange-100 text-orange-800';
       case 'user':
       default:
         return 'bg-gray-100 text-gray-800';
@@ -161,7 +161,7 @@ const UsersList: NextPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                  <HiUsers className="h-8 w-8 mr-3 text-blue-600" />
+                  <HiUsers className="h-8 w-8 mr-3 text-orange-600" />
                   {currentUser?.role === 'admin' ? 'Users Management' : 'Find Users'}
                 </h1>
                 <p className="text-gray-600 mt-2">
@@ -199,7 +199,7 @@ const UsersList: NextPage = () => {
                     placeholder="Search users by name or email..."
                     value={filters.search}
                     onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -207,7 +207,7 @@ const UsersList: NextPage = () => {
                 <select
                   value={filters.role}
                   onChange={(e) => setFilters(prev => ({ ...prev, role: e.target.value, page: 1 }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">Type</option>
                   <option value="user">Users</option>
@@ -216,7 +216,10 @@ const UsersList: NextPage = () => {
               </div>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                className="px-6 py-2 text-white rounded-lg transition-colors flex items-center justify-center"
+                style={{ backgroundColor: '#f26722' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#e55a1f'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#f26722'}
               >
                 <HiSearch className="h-4 w-4 mr-2" />
                 Search
@@ -227,7 +230,7 @@ const UsersList: NextPage = () => {
           {/* Users Grid */}
           {loading ? (
             <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -311,14 +314,14 @@ const UsersList: NextPage = () => {
                         {user.skills?.length > 0 && (
                           <div>
                             <div className="flex items-center mb-2">
-                              <HiCode className="h-4 w-4 mr-2 text-blue-500" />
+                              <HiCode className="h-4 w-4 mr-2 text-orange-500" />
                               <span className="text-sm font-medium text-gray-700">Skills</span>
                             </div>
                             <div className="flex flex-wrap gap-1">
                               {user.skills.slice(0, 3).map((skill: string, index: number) => (
                                 <span
                                   key={index}
-                                  className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                                  className="inline-flex px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full"
                                 >
                                   {skill}
                                 </span>
@@ -346,7 +349,7 @@ const UsersList: NextPage = () => {
                       {currentUser && user._id !== currentUser._id && (
                         <button
                           onClick={() => handleStartChat(user._id)}
-                          className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm"
+                          className="px-3 py-2 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm"
                         >
                           <HiChat className="h-4 w-4 mr-1" />
                           Message
@@ -356,7 +359,7 @@ const UsersList: NextPage = () => {
                         <select
                           value={user.role}
                           onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500"
                         >
                           <option value="user">User</option>
                           <option value="business">Business</option>
@@ -421,7 +424,7 @@ const UsersList: NextPage = () => {
                         onClick={() => handlePageChange(page)}
                         className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                           page === pagination.currentPage
-                            ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                            ? 'z-10 bg-orange-50 border-orange-500 text-orange-600'
                             : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                         }`}
                       >

@@ -44,7 +44,7 @@ const Business: NextPage = () => {
   });
   const [businessProposals, setBusinessProposals] = useState([]);
   const [businessEvents, setBusinessEvents] = useState([]);
-  const [activeTab, setActiveTab] = useState("posts"); // 'posts', 'proposals', or 'events'
+  const [activeTab, setActiveTab] = useState("proposals"); // 'posts', 'proposals', or 'events'
   const [createEventModal, setCreateEventModal] = useState(false);
 
   const router = useRouter();
@@ -194,7 +194,7 @@ const Business: NextPage = () => {
     <>
       {authUserCheck && currentUser?.role === "business" && (
         <>
-          <div className="flex flex-row">
+          <div className="flex flex-row mt-12">
             {/* Business Profile Side Bar */}
             <div className="w-80 bg-white shadow-lg h-screen overflow-y-auto">
               <div className="p-6">
@@ -330,10 +330,10 @@ const Business: NextPage = () => {
                   layout="fill"
                   objectFit="cover"
                 />
-                <label className="flex space-x-2 cursor-pointer bg-gray-600 px-2 py-2 absolute right-0 bottom-0">
+                {/* <label className="flex space-x-2 cursor-pointer bg-gray-600 px-2 py-2 absolute right-0 bottom-0">
                   <HiOutlineCamera className="h-6 w-6" />
                   <p>Update cover</p>
-                </label>
+                </label> */}
               </div>
 
               {/* Add New Post Button */}
@@ -345,9 +345,8 @@ const Business: NextPage = () => {
                   <input
                     type="text"
                     className="bg-white shadow-md cursor-pointer focus:outline-none rounded-2xl pl-5 py-1.5 text-gray-900 font-base"
-                    placeholder="Share your business updates... (Legacy)"
+                    placeholder="Share your business updates.."
                   />
-               
                 </div>
 
                 <button
@@ -391,16 +390,6 @@ const Business: NextPage = () => {
               <div className="mt-8">
                 <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit mx-5">
                   <button
-                    onClick={() => setActiveTab("posts")}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                      activeTab === "posts"
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                  >
-                    Posts
-                  </button>
-                  <button
                     onClick={() => setActiveTab("proposals")}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       activeTab === "proposals"
@@ -419,6 +408,16 @@ const Business: NextPage = () => {
                     }`}
                   >
                     Events
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("posts")}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      activeTab === "posts"
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Posts
                   </button>
                 </div>
               </div>
@@ -491,11 +490,14 @@ const Business: NextPage = () => {
                                 </div>
                                 <div>
                                   <h4 className="text-xl font-bold text-white leading-tight">
-                                  {proposal.title}
-                                </h4>
+                                    {proposal.title}
+                                  </h4>
                                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white bg-opacity-20 text-white backdrop-blur-sm mt-2">
-                                    {proposal.businessProposal?.partnershipType?.replace("_", " ")}
-                                </span>
+                                    {proposal.businessProposal?.partnershipType?.replace(
+                                      "_",
+                                      " "
+                                    )}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -504,8 +506,8 @@ const Business: NextPage = () => {
                           {/* Content */}
                           <div className="p-6">
                             <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                                {proposal.description}
-                              </p>
+                              {proposal.description}
+                            </p>
 
                             {/* Business Proposal Image */}
                             {proposal.image?.url && (
@@ -527,15 +529,22 @@ const Business: NextPage = () => {
                               <div className="flex items-center space-x-4 text-sm text-gray-500">
                                 <span className="flex items-center space-x-1">
                                   <HiUsers className="h-4 w-4" />
-                                  <span className="font-medium">{proposal.businessProposal?.registeredUsers?.length || 0}</span>
+                                  <span className="font-medium">
+                                    {proposal.businessProposal?.registeredUsers
+                                      ?.length || 0}
+                                  </span>
                                 </span>
                                 <span className="flex items-center space-x-1">
                                   <HiHeart className="h-4 w-4" />
-                                  <span className="font-medium">{proposal.likes?.length || 0}</span>
+                                  <span className="font-medium">
+                                    {proposal.likes?.length || 0}
+                                  </span>
                                 </span>
                                 <span className="flex items-center space-x-1">
                                   <HiEye className="h-4 w-4" />
-                                  <span className="font-medium">{proposal.comments?.length || 0}</span>
+                                  <span className="font-medium">
+                                    {proposal.comments?.length || 0}
+                                  </span>
                                 </span>
                               </div>
                             </div>
@@ -543,17 +552,25 @@ const Business: NextPage = () => {
                             {/* Action Buttons */}
                             <div className="flex space-x-2">
                               <button
-                                onClick={() => router.push(`/proposals/${proposal._id}`)}
+                                onClick={() =>
+                                  router.push(`/proposals/${proposal._id}`)
+                                }
                                 className="flex-1 bg-gradient-to-r from-[#f26722] to-[#ff8f57] text-white px-4 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 text-center"
                               >
                                 View Details
                               </button>
                               <button
-                                onClick={() => router.push(`/dashboard/business/proposals/${proposal._id}/registrations`)}
+                                onClick={() =>
+                                  router.push(
+                                    `/dashboard/business/proposals/${proposal._id}/registrations`
+                                  )
+                                }
                                 className="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2"
                               >
                                 <HiUserGroup className="h-4 w-4" />
-                                <span className="hidden sm:inline">Registrations</span>
+                                <span className="hidden sm:inline">
+                                  Registrations
+                                </span>
                               </button>
                             </div>
                           </div>
@@ -581,7 +598,12 @@ const Business: NextPage = () => {
                     </button>
                   </div>
 
-                  {console.log("Rendering events section, businessEvents:", businessEvents, "Length:", businessEvents?.length)}
+                  {console.log(
+                    "Rendering events section, businessEvents:",
+                    businessEvents,
+                    "Length:",
+                    businessEvents?.length
+                  )}
                   {!Array.isArray(businessEvents) ? (
                     <div className="text-center py-12">
                       <HiCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -610,164 +632,189 @@ const Business: NextPage = () => {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5">
-                      {Array.isArray(businessEvents) && businessEvents.map((event: any) => (
-                        <div
-                          key={event._id}
-                          className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
-                        >
-                          {/* Event Image or Gradient Header */}
-                          {event.image?.url ? (
-                            <div className="relative h-48 overflow-hidden">
-                              <Image
-                                src={event.image.url}
-                                alt={event.title}
-                                layout="fill"
-                                objectFit="cover"
-                                className="group-hover:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                              <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                                <div className="flex space-x-2">
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white">
-                                    {event.eventType}
-                                  </span>
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white">
-                                    {event.category}
-                                  </span>
-                                  {event.isFeatured && (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/80 backdrop-blur-sm text-white">
-                                      ⭐ Featured
+                      {Array.isArray(businessEvents) &&
+                        businessEvents.map((event: any) => (
+                          <div
+                            key={event._id}
+                            className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
+                          >
+                            {/* Event Image or Gradient Header */}
+                            {event.image?.url ? (
+                              <div className="relative h-48 overflow-hidden">
+                                <Image
+                                  src={event.image.url}
+                                  alt={event.title}
+                                  layout="fill"
+                                  objectFit="cover"
+                                  className="group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                                <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                                  <div className="flex space-x-2">
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white">
+                                      {event.eventType}
                                     </span>
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white">
+                                      {event.category}
+                                    </span>
+                                    {event.isFeatured && (
+                                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/80 backdrop-blur-sm text-white">
+                                        ⭐ Featured
+                                      </span>
+                                    )}
+                                  </div>
+                                  {event.registrationFee > 0 && (
+                                    <div className="bg-gradient-to-r from-[#f26722] to-[#ff8f57] text-white px-3 py-1 rounded-full text-sm font-bold">
+                                      ${event.registrationFee}
+                                    </div>
                                   )}
                                 </div>
-                                {event.registrationFee > 0 && (
-                                  <div className="bg-gradient-to-r from-[#f26722] to-[#ff8f57] text-white px-3 py-1 rounded-full text-sm font-bold">
-                                    ${event.registrationFee}
-                                  </div>
-                                )}
+                                <div className="absolute bottom-4 left-4 right-4">
+                                  <h4 className="text-xl font-bold text-white leading-tight mb-2">
+                                    {event.title}
+                                  </h4>
+                                </div>
                               </div>
-                              <div className="absolute bottom-4 left-4 right-4">
-                                <h4 className="text-xl font-bold text-white leading-tight mb-2">
-                                  {event.title}
-                                </h4>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="relative h-32 bg-gradient-to-r from-[#f26722] to-[#ff8f57] p-6">
-                              <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-                              <div className="relative z-10 flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <div className="p-2 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
-                                    <HiCalendar className="h-6 w-6 text-white" />
-                                  </div>
-                                  <div>
-                                    <h4 className="text-xl font-bold text-white leading-tight">
-                                      {event.title}
-                                    </h4>
-                                    <div className="flex space-x-2 mt-2">
-                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white bg-opacity-20 text-white backdrop-blur-sm">
-                                  {event.eventType}
-                                </span>
-                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white bg-opacity-20 text-white backdrop-blur-sm">
-                                  {event.category}
-                                </span>
+                            ) : (
+                              <div className="relative h-32 bg-gradient-to-r from-[#f26722] to-[#ff8f57] p-6">
+                                <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+                                <div className="relative z-10 flex items-center justify-between">
+                                  <div className="flex items-center space-x-3">
+                                    <div className="p-2 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+                                      <HiCalendar className="h-6 w-6 text-white" />
+                                    </div>
+                                    <div>
+                                      <h4 className="text-xl font-bold text-white leading-tight">
+                                        {event.title}
+                                      </h4>
+                                      <div className="flex space-x-2 mt-2">
+                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white bg-opacity-20 text-white backdrop-blur-sm">
+                                          {event.eventType}
+                                        </span>
+                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-white bg-opacity-20 text-white backdrop-blur-sm">
+                                          {event.category}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
+                                  {event.registrationFee > 0 && (
+                                    <div className="bg-white bg-opacity-20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-bold">
+                                      ${event.registrationFee}
+                                    </div>
+                                  )}
                                 </div>
-                                {event.registrationFee > 0 && (
-                                  <div className="bg-white bg-opacity-20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-bold">
-                                    ${event.registrationFee}
-                                  </div>
-                                )}
                               </div>
-                            </div>
-                          )}
+                            )}
 
-                          {/* Content */}
-                          <div className="p-6">
-                            <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                            {/* Content */}
+                            <div className="p-6">
+                              <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
                                 {event.description}
                               </p>
 
-                            {/* Event Details */}
-                            <div className="space-y-2 mb-4 text-sm text-gray-500">
-                              {event.startDate && (
-                                <div className="flex items-center space-x-2">
-                                  <HiCalendar className="h-4 w-4 text-[#f26722]" />
-                                  <span className="font-medium">
-                                    {new Date(event.startDate).toLocaleDateString('en-US', {
-                                      weekday: 'short',
-                                      year: 'numeric',
-                                      month: 'short',
-                                      day: 'numeric'
-                                    })}
+                              {/* Event Details */}
+                              <div className="space-y-2 mb-4 text-sm text-gray-500">
+                                {event.startDate && (
+                                  <div className="flex items-center space-x-2">
+                                    <HiCalendar className="h-4 w-4 text-[#f26722]" />
+                                    <span className="font-medium">
+                                      {new Date(
+                                        event.startDate
+                                      ).toLocaleDateString("en-US", {
+                                        weekday: "short",
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                      })}
+                                    </span>
+                                  </div>
+                                )}
+                                {event.location && (
+                                  <div className="flex items-center space-x-2">
+                                    <HiLocationMarker className="h-4 w-4 text-[#f26722]" />
+                                    <span className="font-medium truncate">
+                                      {event.location}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Stats */}
+                              <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                  <span className="flex items-center space-x-1">
+                                    <HiUsers className="h-4 w-4" />
+                                    <span className="font-medium">
+                                      {event.registeredUsers?.length || 0}
+                                    </span>
+                                  </span>
+                                  <span className="flex items-center space-x-1">
+                                    <HiHeart className="h-4 w-4" />
+                                    <span className="font-medium">
+                                      {event.likes?.length || 0}
+                                    </span>
+                                  </span>
+                                  <span className="flex items-center space-x-1">
+                                    <HiEye className="h-4 w-4" />
+                                    <span className="font-medium">
+                                      {event.comments?.length || 0}
+                                    </span>
                                   </span>
                                 </div>
-                              )}
-                              {event.location && (
-                                <div className="flex items-center space-x-2">
-                                  <HiLocationMarker className="h-4 w-4 text-[#f26722]" />
-                                  <span className="font-medium truncate">{event.location}</span>
-                                </div>
-                              )}
-                            </div>
+                              </div>
 
-                            {/* Stats */}
-                            <div className="flex items-center justify-between mb-6">
-                              <div className="flex items-center space-x-4 text-sm text-gray-500">
-                                <span className="flex items-center space-x-1">
-                                  <HiUsers className="h-4 w-4" />
-                                  <span className="font-medium">{event.registeredUsers?.length || 0}</span>
-                                </span>
-                                <span className="flex items-center space-x-1">
-                                  <HiHeart className="h-4 w-4" />
-                                  <span className="font-medium">{event.likes?.length || 0}</span>
-                                </span>
-                                <span className="flex items-center space-x-1">
-                                  <HiEye className="h-4 w-4" />
-                                  <span className="font-medium">{event.comments?.length || 0}</span>
-                                </span>
+                              {/* Action Buttons */}
+                              <div className="grid grid-cols-2 gap-2">
+                                <button
+                                  onClick={() =>
+                                    router.push(`/events/${event._id}`)
+                                  }
+                                  className="bg-gradient-to-r from-[#f26722] to-[#ff8f57] text-white px-4 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 text-center"
+                                >
+                                  View Event
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    router.push(
+                                      `/dashboard/business/events/${event._id}/edit`
+                                    )
+                                  }
+                                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-semibold transition-all duration-200 text-center"
+                                >
+                                  Edit
+                                </button>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-2 mt-2">
+                                <button
+                                  onClick={() =>
+                                    router.push(
+                                      `/dashboard/business/events/${event._id}/registrations`
+                                    )
+                                  }
+                                  className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-sm"
+                                >
+                                  <HiUserGroup className="h-4 w-4" />
+                                  <span>Registrations</span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (
+                                      confirm(
+                                        "Are you sure you want to delete this event?"
+                                      )
+                                    ) {
+                                      // Handle delete
+                                    }
+                                  }}
+                                  className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 text-sm"
+                                >
+                                  Delete
+                                </button>
                               </div>
                             </div>
-
-                            {/* Action Buttons */}
-                            <div className="grid grid-cols-2 gap-2">
-                              <button
-                                onClick={() => router.push(`/events/${event._id}`)}
-                                className="bg-gradient-to-r from-[#f26722] to-[#ff8f57] text-white px-4 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 text-center"
-                              >
-                                View Event
-                              </button>
-                              <button
-                                onClick={() => router.push(`/dashboard/business/events/${event._id}/edit`)}
-                                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl font-semibold transition-all duration-200 text-center"
-                              >
-                                Edit
-                              </button>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-2 mt-2">
-                              <button
-                                onClick={() => router.push(`/dashboard/business/events/${event._id}/registrations`)}
-                                className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-sm"
-                              >
-                                <HiUserGroup className="h-4 w-4" />
-                                <span>Registrations</span>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (confirm("Are you sure you want to delete this event?")) {
-                                    // Handle delete
-                                  }
-                                }}
-                                className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 text-sm"
-                              >
-                                Delete
-                              </button>
-                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   )}
                 </div>

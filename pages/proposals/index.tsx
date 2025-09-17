@@ -200,7 +200,7 @@ const ProposalsPage: NextPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <HiBriefcase className="h-8 w-8 mr-3 text-blue-600" />
+                <HiBriefcase className="h-8 w-8 mr-3" style={{ color: '#f26722' }} />
                 Business Proposals
               </h1>
               <p className="text-gray-600 mt-2">
@@ -214,7 +214,10 @@ const ProposalsPage: NextPage = () => {
               {currentUser?.role === 'business' && (
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  className="text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+                  style={{ backgroundColor: '#f26722' }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#e55a1f'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#f26722'}
                 >
                   <HiPlus className="h-4 w-4" />
                   <span>Create Proposal</span>
@@ -244,7 +247,8 @@ const ProposalsPage: NextPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search proposals by title, description, or industry..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                    style={{ '--tw-ring-color': '#f26722' } as React.CSSProperties}
                   />
                 </div>
               </div>
@@ -255,7 +259,7 @@ const ProposalsPage: NextPage = () => {
                     setSelectedIndustry(e.target.value);
                     handleFilterChange();
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">All Industries</option>
                   {industries.map((industry) => (
@@ -272,7 +276,7 @@ const ProposalsPage: NextPage = () => {
                     setSelectedPartnershipType(e.target.value);
                     handleFilterChange();
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">All Partnership Types</option>
                   {partnershipTypes.map((type) => (
@@ -284,7 +288,10 @@ const ProposalsPage: NextPage = () => {
               </div>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                className="px-6 py-2 text-white rounded-lg transition-colors flex items-center justify-center"
+                style={{ backgroundColor: '#f26722' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#e55a1f'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#f26722'}
               >
                 <HiSearch className="h-4 w-4 mr-2" />
                 Search
@@ -296,7 +303,7 @@ const ProposalsPage: NextPage = () => {
         {/* Proposals Grid */}
         {loading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
           </div>
         ) : proposals.length === 0 ? (
           <div className="text-center py-12">
@@ -316,10 +323,10 @@ const ProposalsPage: NextPage = () => {
               {proposals.map((proposal) => (
                 <div key={proposal._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                   {/* Proposal Header */}
-                  <div className="p-4 border-b border-gray-200 bg-blue-50">
+                  <div className="p-4 border-b border-gray-200 bg-orange-50">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
                           {proposal.postedBy.userProfileImage?.url ? (
                             <img
                               src={proposal.postedBy.userProfileImage.url}
@@ -327,7 +334,7 @@ const ProposalsPage: NextPage = () => {
                               className="w-10 h-10 rounded-full object-cover"
                             />
                           ) : (
-                            <HiBriefcase className="h-5 w-5 text-blue-600" />
+                            <HiBriefcase className="h-5 w-5 text-orange-600" />
                           )}
                         </div>
                         <div>
@@ -339,7 +346,7 @@ const ProposalsPage: NextPage = () => {
                           </p>
                         </div>
                       </div>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                         <HiBriefcase className="h-3 w-3 mr-1" />
                         Proposal
                       </span>
@@ -358,7 +365,7 @@ const ProposalsPage: NextPage = () => {
                     {/* Proposal Details */}
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center text-sm">
-                        <HiBriefcase className="h-4 w-4 text-blue-600 mr-2" />
+                        <HiBriefcase className="h-4 w-4 text-orange-600 mr-2" />
                         <span className="text-gray-600">{proposal.businessProposal.industry}</span>
                       </div>
                       
@@ -467,7 +474,7 @@ const ProposalsPage: NextPage = () => {
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => router.push(`/proposals/${proposal._id}`)}
-                            className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                            className="text-orange-600 hover:text-orange-700 font-medium text-sm"
                           >
                             View
                           </button>
@@ -557,7 +564,7 @@ const ProposalsPage: NextPage = () => {
                             onClick={() => handlePageChange(page)}
                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                               page === pagination.currentPage
-                                ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                                ? 'z-10 bg-orange-50 border-orange-500 text-orange-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                             }`}
                           >

@@ -234,11 +234,11 @@ const User: NextPage = () => {
                   <input
                     type="text"
                     className="bg-white shadow-md cursor-pointer focus:outline-none  rounded-2xl pl-5 py-1.5 text-gray-900 font-base"
-                    placeholder="Add New Post (Legacy)"
+                    placeholder="Add New Post"
                   />
-                  <div className="bg-white shadow-lg  ml-3 rounded-md p-[0.5px] cursor-pointer">
+                  {/* <div className="bg-white shadow-lg  ml-3 rounded-md p-[0.5px] cursor-pointer">
                     <HiPlus className="h-6 w-6 " />
-                  </div>
+                  </div> */}
                 </div>
                 
                 <button

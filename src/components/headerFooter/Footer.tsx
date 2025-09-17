@@ -22,9 +22,9 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="w-full mt-16 bg-gradient-to-r from-white to-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
+      <div className=" mx-auto  -mt-10">
         <div className="py-12 px-6 rounded-3xl bg-white/70 backdrop-blur-sm shadow-sm animate-fadeIn">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl m-auto">
             {/* About */}
             <div>
               <h3 className="text-lg font-bold text-gray-900 mb-3">LinkCofounders</h3>
