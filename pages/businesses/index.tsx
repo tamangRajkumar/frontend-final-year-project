@@ -291,10 +291,10 @@ const BusinessesList: NextPage = () => {
                       {currentUser && business._id !== currentUser._id && (
                         <button
                           onClick={() => handleStartChat(business._id)}
-                          className="px-3 py-2 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm"
+                          className="px-3 py-2 px-4 py-2 rounded-lg transition-colors flex items-center justify-center text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-sm bg-[#f26722] hover:bg-[#a14e24] "
                         >
                           <HiChat className="h-4 w-4 mr-1" />
-                          Chat
+                          Message
                         </button>
                       )}
                       
