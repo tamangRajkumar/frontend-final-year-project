@@ -13,10 +13,11 @@ import {
   HiCurrencyDollar,
   HiHeart,
   HiChat,
-  HiTag
+  HiTag,
+  HiStar,
 } from "react-icons/hi";
 import { toast } from "react-toastify";
-import { getAllEvents } from "../api";
+import { getAllEvents } from "../api/index";
 
 interface Event {
   _id: string;
@@ -151,6 +152,32 @@ const EventsPage: NextPage = () => {
   const handleEventTypeChange = (eventType: string) => {
     setSelectedEventType(eventType);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
+  };
+
+  const handleToggleFeatured = async (eventId: string, isCurrentlyFeatured: boolean) => {
+    try {
+      // Make API call directly
+      const response = await fetch(`/api/event/${eventId}/featured`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ isFeatured: !isCurrentlyFeatured })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        toast.success(data.message);
+        fetchEvents(); // Refresh the events list
+      } else {
+        toast.error(data.message || "Failed to toggle featured status");
+      }
+    } catch (error) {
+      console.error("Error toggling featured status:", error);
+      toast.error("Failed to toggle featured status");
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -336,6 +363,11 @@ const EventsPage: NextPage = () => {
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getEventTypeColor(event.eventType)}`}>
                           {event.eventType}
                         </span>
+                        {event?.isFeatured && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            ⭐ Featured
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -438,14 +470,33 @@ const EventsPage: NextPage = () => {
                       >
                         View Details
                       </button>
-                      {currentUser && !isEventFull(event.registeredUsers.length, event.maxAttendees) && (
-                        <button
-                          onClick={() => router.push(`/events/${event._id}`)}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
-                        >
-                          Register
-                        </button>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        {currentUser && !isEventFull(event.registeredUsers.length, event.maxAttendees) && (
+                          <button
+                            onClick={() => router.push(`/events/${event._id}`)}
+                            className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors"
+                          >
+                            Register
+                          </button>
+                        )}
+                        {currentUser?.role === 'admin' && (
+                          <button
+                            onClick={() => handleToggleFeatured(event._id, event?.isFeatured)}
+                            className={`p-2 rounded-full transition-colors ${
+                              event?.isFeatured 
+                                ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100' 
+                                : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-50'
+                            }`}
+                            title={event?.isFeatured ? 'Remove from featured' : 'Add to featured'}
+                          >
+                            {event?.isFeatured ? (
+                              <HiStar className="h-5 w-5" />
+                            ) : (
+                              <HiStar className="h-5 w-5" />
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -56,7 +56,7 @@ const Comments = ({
                     <div className=" flex ">
                       {/* Profile Image */}
                       <Image
-                        src={commentData?.postedBy?.userProfileImage?.url ?? Avatar}
+                        src={commentData?.postedBy?.userProfileImage?.url || Avatar.src}
                         alt="Picture of the author"
                         width={50}
                         height={50}

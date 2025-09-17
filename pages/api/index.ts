@@ -25,6 +25,97 @@ export const countriesData = async () => {
   return await axios.get("https://countriesnow.space/api/v0.1/countries");
 };
 
+// KYC API functions
+export const submitKYC = async (formData: FormData, token: string) => {
+  return await axios.post("/kyc/submit", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const getKYCStatus = async (data: any, token: string) => {
+  return await axios.get("/kyc/status", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getPendingKYC = async (data: any, token: string) => {
+  return await axios.get("/kyc/pending", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const verifyKYC = async (userId: string, isVerified: boolean, rejectionReason: string, token: string) => {
+  return await axios.post("/kyc/verify", {
+    userId,
+    isVerified,
+    rejectionReason,
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+// Goals and Skills API functions
+export const getGoalsAndSkills = async (token: string) => {
+  return await axios.get("/user/goals-skills", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const updateGoalsAndSkills = async (goals: string[], skills: string[], token: string) => {
+  return await axios.put("/user/goals-skills", {
+    goals,
+    skills,
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+// Search API functions
+export const searchUsers = async (query: string, token: string) => {
+  return await axios.get(`/users?search=${encodeURIComponent(query)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const searchPosts = async (query: string, token: string) => {
+  return await axios.get(`/posts?search=${encodeURIComponent(query)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const searchBusinesses = async (query: string, token: string) => {
+  return await axios.get(`/businesses?search=${encodeURIComponent(query)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const searchEvents = async (query: string, token: string) => {
+  return await axios.get(`/event/search?search=${encodeURIComponent(query)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 // Upload Image Cloudinary
 export const uploadImage = async (formData: any, token: string) => {
   return await axios.post("/upload-image", formData);
@@ -41,7 +132,7 @@ export const postSubmit = (postSubmitData: IPostSubmitData, token: string) => {
 
 // fetch User Posts show in dashboard
 export const fetchPosts = (token: string) => {
-  return axios.get(`/user-posts`, {
+  return axios.get(`/posts`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -51,7 +142,7 @@ export const fetchPosts = (token: string) => {
 //Get individual post
 export const fetchIndividualPost = (postId: any) => {
   console.log(postId);
-  return axios.get(`/fetchindividualpost/${postId}`);
+  return axios.get(`/posts/${postId}`);
 };
 
 // fetch all Posts show in news feed
@@ -78,8 +169,8 @@ export const postCommentSubmit = (
   token: string
 ) => {
   return axios.post(
-    `/submit-post-comment`,
-    { addComment, postId },
+    `/posts/${postId}/comment`,
+    { text: addComment },
 
     {
       headers: {
@@ -108,9 +199,8 @@ export const deletePostComment = (
 
 // fetch post comments data only
 export const fetchPostCommentsDataOnly = (postId: any, token: string) => {
-  return axios.post(
-    `/post-comments-data`,
-    { postId },
+  return axios.get(
+    `/posts/${postId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -206,24 +296,7 @@ export const verifyBusiness = (id: string, isVerified: boolean, token: string) =
   });
 };
 
-// Get pending KYC verifications
-export const getPendingKYC = (params: any, token: string) => {
-  return axios.get(`/kyc/pending`, {
-    params,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
 
-// Verify KYC
-export const verifyKYC = (id: string, isVerified: boolean, rejectionReason: string, token: string) => {
-  return axios.put(`/kyc/${id}/verify`, { isVerified, rejectionReason }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
 
 // Unverify KYC
 export const unverifyKYC = (id: string, token: string) => {
@@ -365,7 +438,7 @@ export const updateRegistrationStatus = (id: string, registrationId: string, sta
 
 // Event API functions
 export const createEvent = (eventData: any, token: string) => {
-  return axios.post(`/events`, eventData, {
+  return axios.post(`/event`, eventData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -378,11 +451,11 @@ export const getAllEvents = (params: any, token?: string) => {
       Authorization: `Bearer ${token}`,
     },
   } : {};
-  return axios.get(`/events`, { params, ...config });
+  return axios.get(`/event`, { params, ...config });
 };
 
 export const getAllEventsAdmin = (params: any, token: string) => {
-  return axios.get(`/events/admin/all`, {
+  return axios.get(`/event/admin/all`, {
     params,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -391,7 +464,7 @@ export const getAllEventsAdmin = (params: any, token: string) => {
 };
 
 export const getEventsByOrganizer = (organizerId: string, params: any, token: string) => {
-  return axios.get(`/events/organizer/${organizerId}`, {
+  return axios.get(`/event/organizer/${organizerId}`, {
     params,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -405,11 +478,11 @@ export const getEventById = (id: string, token?: string) => {
       Authorization: `Bearer ${token}`,
     },
   } : {};
-  return axios.get(`/events/${id}`, config);
+  return axios.get(`/event/${id}`, config);
 };
 
 export const updateEvent = (id: string, eventData: any, token: string) => {
-  return axios.put(`/events/${id}`, eventData, {
+  return axios.put(`/event/${id}`, eventData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -417,7 +490,7 @@ export const updateEvent = (id: string, eventData: any, token: string) => {
 };
 
 export const deleteEvent = (id: string, token: string) => {
-  return axios.delete(`/events/${id}`, {
+  return axios.delete(`/event/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -425,7 +498,7 @@ export const deleteEvent = (id: string, token: string) => {
 };
 
 export const registerForEvent = (id: string, registrationData: any, token: string) => {
-  return axios.post(`/events/${id}/register`, registrationData, {
+  return axios.post(`/event/${id}/register`, registrationData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -433,7 +506,7 @@ export const registerForEvent = (id: string, registrationData: any, token: strin
 };
 
 export const getEventRegistrations = (id: string, token: string) => {
-  return axios.get(`/events/${id}/registrations`, {
+  return axios.get(`/event/${id}/registrations`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -441,7 +514,7 @@ export const getEventRegistrations = (id: string, token: string) => {
 };
 
 export const toggleEventLike = (id: string, token: string) => {
-  return axios.post(`/events/${id}/like`, {}, {
+  return axios.post(`/event/${id}/like`, {}, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -449,7 +522,7 @@ export const toggleEventLike = (id: string, token: string) => {
 };
 
 export const addEventComment = (id: string, commentData: any, token: string) => {
-  return axios.post(`/events/${id}/comment`, commentData, {
+  return axios.post(`/event/${id}/comment`, commentData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -563,8 +636,8 @@ export const getAllFeaturedContent = (token: string) => {
   });
 };
 
-export const toggleFeaturedProposal = (postId: string, token: string) => {
-  return axios.put(`/featured/proposal/${postId}`, {}, {
+export const toggleFeaturedProposal = (postId: string, isFeatured: boolean, token: string) => {
+  return axios.put(`/posts/${postId}/featured`, { isFeatured }, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -579,8 +652,24 @@ export const toggleFeaturedBusiness = (userId: string, token: string) => {
   });
 };
 
-export const toggleFeaturedEvent = (eventId: string, token: string) => {
-  return axios.put(`/featured/event/${eventId}`, {}, {
+export const toggleFeaturedEvent = (eventId: string, isFeatured: boolean, token: string) => {
+  return axios.put(`/event/${eventId}/featured`, { isFeatured }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getFeaturedEvents = async (token: string) => {
+  return axios.get(`/event?featured=true`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getFeaturedPosts = async (token: string) => {
+  return axios.get(`/posts?featured=true&postType=business_proposal`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

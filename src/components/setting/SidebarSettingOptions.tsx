@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { icons } from "react-icons";
-import { HiOutlineLockClosed, HiOutlineUserCircle } from "react-icons/hi";
+import { HiOutlineLockClosed, HiOutlineUserCircle, HiOutlineDocumentText } from "react-icons/hi";
 
 const SidebarSettingOptions = () => {
   const sideBarSettingOptionsData = [
@@ -10,6 +10,11 @@ const SidebarSettingOptions = () => {
       name: "Profile Setting",
       link: "/setting/profile_setting",
       icon: <HiOutlineUserCircle className="h-6 w-6 text-gray-600" />,
+    },
+    {
+      name: "KYC Verification",
+      link: "/setting/kyc_verification",
+      icon: <HiOutlineDocumentText className="h-6 w-6 text-gray-600" />,
     },
     {
       name: "Security and password",

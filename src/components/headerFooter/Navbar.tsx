@@ -17,6 +17,7 @@ const Navbar: NextPage = () => {
   const [showMobileViewDropdown, setShowMobileViewDropdown] = useState(false);
   const [postModal, setPostModal] = useState(false);
   const [profileUrl, setProfileUrl] = useState();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [authUser, setAuthUser] = useState(false);
   //check whether the user is logged in or not if logged in and isAuthenticated is true
@@ -94,6 +95,14 @@ const Navbar: NextPage = () => {
   // Handle Hide show post modal
   const handlePostModal = () => {
     setPostModal(true);
+  };
+
+  // Handle search
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   // Close Profile Dropdown on mouse clicked event
@@ -196,6 +205,24 @@ const Navbar: NextPage = () => {
                 </div>
               </div>
 
+              {/* Mobile Search */}
+              {authUser && (
+                <div className="flex-1 max-w-xs mx-4 sm:hidden">
+                  <form onSubmit={handleSearch} className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search..."
+                      className="w-full pl-8 pr-3 py-2 rounded-full border border-gray-200 bg-white/80 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
+                    />
+                    <button type="submit" className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500">
+                      <HiSearch className="h-4 w-4" />
+                    </button>
+                  </form>
+                </div>
+              )}
+
               {/* Web View Nav Links: only show when authenticated */}
               {authUser ? (
                 <div className="hidden sm:ml-6 sm:block">
@@ -220,15 +247,20 @@ const Navbar: NextPage = () => {
                       </div>
                     ))}
 
-                    {/* Minimal search */}
+                    {/* Search */}
                     <div className="ml-3 flex items-center">
-                      <div className="relative">
+                      <form onSubmit={handleSearch} className="relative">
                         <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
                           placeholder="Search"
                           className="hidden md:block w-48 pl-3 pr-8 py-1 rounded-full border border-gray-200 bg-white/80 text-sm focus:outline-none focus:ring-2 focus:ring-orange-200"
                         />
-                        <HiSearch className="absolute right-1 top-1.5 h-5 w-5 text-gray-500" />
-                      </div>
+                        <button type="submit" className="absolute right-1 top-1.5 h-5 w-5 text-gray-500 hover:text-gray-700">
+                          <HiSearch className="h-5 w-5" />
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </div>

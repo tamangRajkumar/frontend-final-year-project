@@ -14,27 +14,25 @@ import {
 } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { 
-  getAllFeaturedContent, 
-  toggleFeaturedProposal, 
-  toggleFeaturedBusiness, 
-  toggleFeaturedEvent 
-} from "../api";
+  toggleFeaturedEvent,
+  getFeaturedEvents,
+  toggleFeaturedProposal,
+  getFeaturedPosts
+} from "../api/index";
 import RoleGuard from "../../src/components/auth/RoleGuard";
 
 interface FeaturedContent {
   featuredProposals: any[];
-  featuredBusinesses: any[];
   featuredEvents: any[];
 }
 
 const FeaturedContentPage: NextPage = () => {
   const [featuredContent, setFeaturedContent] = useState<FeaturedContent>({
     featuredProposals: [],
-    featuredBusinesses: [],
     featuredEvents: []
   });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'proposals' | 'businesses' | 'events'>('proposals');
+  const [activeTab, setActiveTab] = useState<'proposals' | 'events'>('proposals');
 
   const router = useRouter();
   const token = useSelector((state: any) => state.authUser.token);
@@ -51,9 +49,16 @@ const FeaturedContentPage: NextPage = () => {
   const fetchFeaturedContent = async () => {
     try {
       setLoading(true);
-      const { data } = await getAllFeaturedContent(token);
-      if (data.success) {
-        setFeaturedContent(data.data);
+      const [eventsResponse, postsResponse] = await Promise.all([
+        getFeaturedEvents(token),
+        getFeaturedPosts(token)
+      ]);
+      
+      if (eventsResponse.data.success && postsResponse.data.success) {
+        setFeaturedContent({ 
+          featuredEvents: eventsResponse.data.data,
+          featuredProposals: postsResponse.data.data
+        });
       }
     } catch (error) {
       console.error("Error fetching featured content:", error);
@@ -63,21 +68,15 @@ const FeaturedContentPage: NextPage = () => {
     }
   };
 
-  const handleToggleFeatured = async (type: 'proposal' | 'business' | 'event', id: string) => {
+  const handleToggleFeatured = async (type: 'proposal' | 'event', id: string) => {
     try {
       let response;
-      switch (type) {
-        case 'proposal':
-          response = await toggleFeaturedProposal(id, token);
-          break;
-        case 'business':
-          response = await toggleFeaturedBusiness(id, token);
-          break;
-        case 'event':
-          response = await toggleFeaturedEvent(id, token);
-          break;
+      if (type === 'proposal') {
+        response = await toggleFeaturedProposal(id, false, token);
+      } else {
+        response = await toggleFeaturedEvent(id, false, token);
       }
-
+      
       if (response.data.success) {
         toast.success(response.data.message);
         fetchFeaturedContent();
@@ -157,17 +156,6 @@ const FeaturedContentPage: NextPage = () => {
                 Proposals ({featuredContent.featuredProposals.length})
               </button>
               <button
-                onClick={() => setActiveTab('businesses')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center ${
-                  activeTab === 'businesses'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <HiUsers className="h-4 w-4 mr-2" />
-                Businesses ({featuredContent.featuredBusinesses.length})
-              </button>
-              <button
                 onClick={() => setActiveTab('events')}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center ${
                   activeTab === 'events'
@@ -241,10 +229,19 @@ const FeaturedContentPage: NextPage = () => {
                           {proposal.description}
                         </p>
                         
+                        {proposal.businessProposal && (
+                          <div className="mb-3 text-xs text-gray-500">
+                            <div className="flex items-center justify-between">
+                              <span>Industry: {proposal.businessProposal.industry}</span>
+                              <span>Investment: ${proposal.businessProposal.investmentAmount?.min || 0} - ${proposal.businessProposal.investmentAmount?.max || 0}</span>
+                            </div>
+                          </div>
+                        )}
+                        
                         <div className="flex items-center justify-between text-xs text-gray-500">
                           <span className="flex items-center">
                             <HiUsers className="h-3 w-3 mr-1" />
-                            {proposal.businessProposal?.registeredUsers?.length || 0} registered
+                            {proposal.businessProposal?.interestedParties?.length || 0} interested
                           </span>
                           <span className="flex items-center">
                             <HiStar className="h-3 w-3 mr-1" />
@@ -254,90 +251,11 @@ const FeaturedContentPage: NextPage = () => {
                         
                         <div className="mt-3 flex space-x-2">
                           <button
-                            onClick={() => router.push(`/proposals/${proposal._id}`)}
+                            onClick={() => router.push(`/posts/${proposal._id}`)}
                             className="flex-1 px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs hover:bg-gray-200 transition-colors flex items-center justify-center"
                           >
                             <HiEye className="h-3 w-3 mr-1" />
                             View
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Featured Businesses */}
-            {activeTab === 'businesses' && (
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                  <HiUsers className="h-5 w-5 mr-2 text-green-600" />
-                  Featured Businesses
-                </h2>
-                
-                {featuredContent.featuredBusinesses.length === 0 ? (
-                  <div className="text-center py-12">
-                    <HiUsers className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No featured businesses</h3>
-                    <p className="text-gray-500">No businesses are currently featured</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {featuredContent.featuredBusinesses.map((business) => (
-                      <div key={business._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center">
-                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                              {business.userProfileImage?.url ? (
-                                <img
-                                  src={business.userProfileImage.url}
-                                  alt={business.fname}
-                                  className="w-12 h-12 rounded-full object-cover"
-                                />
-                              ) : (
-                                <span className="text-green-600 font-semibold">
-                                  {business.fname?.charAt(0)}{business.lname?.charAt(0)}
-                                </span>
-                              )}
-                            </div>
-                            <div>
-                              <h4 className="font-medium text-gray-900">
-                                {business.businessInfo?.businessName || `${business.fname} ${business.lname}`}
-                              </h4>
-                              <p className="text-sm text-gray-500">
-                                {business.businessInfo?.businessType}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                Featured {formatDate(business.featuredAt)}
-                              </p>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => handleToggleFeatured('business', business._id)}
-                            className="p-1 text-yellow-500 hover:text-yellow-600 transition-colors"
-                            title="Remove from featured"
-                          >
-                            <HiStarSolid className="h-5 w-5" />
-                          </button>
-                        </div>
-                        
-                        {business.businessInfo?.businessDescription && (
-                          <p className="text-gray-600 text-sm line-clamp-3 mb-3">
-                            {business.businessInfo.businessDescription}
-                          </p>
-                        )}
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Verified
-                          </span>
-                          <button
-                            onClick={() => router.push(`/users/${business._id}`)}
-                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs hover:bg-gray-200 transition-colors flex items-center"
-                          >
-                            <HiEye className="h-3 w-3 mr-1" />
-                            View Profile
                           </button>
                         </div>
                       </div>

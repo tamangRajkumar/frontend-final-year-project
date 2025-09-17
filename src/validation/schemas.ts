@@ -13,9 +13,6 @@ export const signupSchema = z.object({
   country: z.string().min(1, "Please select your country"),
   gender: z.string().min(1, "Please select your gender").refine((val) => ["Male", "Female", "Others"].includes(val), { message: "Please select a valid gender option" }),
   role: z.string().min(1, "Please select your account type").refine((val) => ["user", "business"].includes(val), { message: "Please select a valid account type" }),
-  kycDocumentType: z.string().min(1, "Please select document type").refine((val) => ["citizenship", "pan_card"].includes(val), { message: "Please select a valid document type" }),
-  kycDocumentNumber: z.string().min(1, "Document number is required").min(5, "Document number must be at least 5 characters"),
-  kycDocumentImage: z.any().refine((file) => file && file.length > 0, "Please upload your KYC document"),
 });
 
 export const businessSignupSchema = z.object({
@@ -152,3 +149,12 @@ export type InterestFormData = z.infer<typeof interestSchema>;
 export type RegistrationFormData = z.infer<typeof registrationSchema>;
 export type EventFormData = z.infer<typeof eventSchema>;
 export type EventRegistrationFormData = z.infer<typeof eventRegistrationSchema>;
+
+// KYC validation schema
+export const kycSchema = z.object({
+  documentType: z.string().min(1, "Please select document type").refine((val) => ["citizenship", "passport", "pan_card"].includes(val), { message: "Please select a valid document type" }),
+  documentNumber: z.string().min(1, "Document number is required").min(5, "Document number must be at least 5 characters"),
+  documentImage: z.any().refine((file) => file && file.length > 0, "Please upload your KYC document"),
+});
+
+export type KYCFormData = z.infer<typeof kycSchema>;

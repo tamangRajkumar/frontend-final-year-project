@@ -71,18 +71,57 @@ const SidebarProfileSection = ({ userData }: any) => {
               <span className="mr-2">{userData?.fname}</span>
               <span>{userData?.lname}</span>
             </p>
-            {/* <p className="font-semibold text-base">{userData?.gender}</p> */}
             <p>
               <span className="font-semibold text-base">From: </span>
               <span>{userData?.country}</span>
             </p>
-            {/* <p>College</p>
-        <p>Semester</p> */}
             <p>
               <span className="font-semibold text-base">Joined Date: </span>
               <span>{moment(userData?.createdAt).calendar()}</span>
             </p>
           </div>
+
+          {/* Goals Section */}
+          {userData?.goals && userData.goals.length > 0 && (
+            <div className="mt-6">
+              <p className="font-bold text-gray-900 mb-2">Goals</p>
+              <div className="space-y-1">
+                {userData.goals.slice(0, 3).map((goal: string, index: number) => (
+                  <p key={index} className="text-sm text-gray-600 flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    <span className="line-clamp-2">{goal}</span>
+                  </p>
+                ))}
+                {userData.goals.length > 3 && (
+                  <p className="text-xs text-gray-500">
+                    +{userData.goals.length - 3} more goals
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Skills Section */}
+          {userData?.skills && userData.skills.length > 0 && (
+            <div className="mt-6">
+              <p className="font-bold text-gray-900 mb-2">Skills</p>
+              <div className="flex flex-wrap gap-1">
+                {userData.skills.slice(0, 6).map((skill: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {userData.skills.length > 6 && (
+                  <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                    +{userData.skills.length - 6}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* <div className="mt-10">
             <p className="font-bold">My Favorite Places</p>

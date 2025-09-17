@@ -10,7 +10,7 @@ import PostModalDashboard from "../../src/components/Modal/PostModalDashboard";
 import CreatePostModal from "../../src/components/posts/CreatePostModal";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { fetchPosts, postLiked, postUnliked } from "../api";
+import { fetchPosts, postLiked, postUnliked, getGoalsAndSkills } from "../api";
 import { toast } from "react-toastify";
 
 const User: NextPage = () => {
@@ -20,6 +20,7 @@ const User: NextPage = () => {
   const [authUserCheck, setAuthUserCheck] = useState();
   const [userPosts, setUserPosts] = useState();
   const [isClient, setIsClient] = useState(false);
+  const [goalsAndSkills, setGoalsAndSkills] = useState({ goals: [], skills: [] });
 
   const router = useRouter();
 
@@ -116,6 +117,30 @@ const User: NextPage = () => {
   useEffect(() => {
     if (currentUser && token) getUserPosts();
   }, [token, currentUser, getUserPosts]);
+
+  // Fetch goals and skills
+  const fetchGoalsAndSkills = async () => {
+    try {
+      const { data } = await getGoalsAndSkills(token);
+      if (data.success) {
+        setGoalsAndSkills(data.data);
+        // Update userData with goals and skills for sidebar
+        setUserData(prev => ({
+          ...prev,
+          goals: data.data.goals,
+          skills: data.data.skills
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching goals and skills:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser && token) {
+      fetchGoalsAndSkills();
+    }
+  }, [token, currentUser]);
   
   // Prevent hydration mismatch by not rendering until client-side
   if (!isClient) {
@@ -150,6 +175,55 @@ const User: NextPage = () => {
                   <p> Update cover </p>
                 </label>
               </div>
+
+              {/* Goals and Skills Section */}
+              {(goalsAndSkills.goals.length > 0 || goalsAndSkills.skills.length > 0) && (
+                <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Goals & Skills</h2>
+                  
+                  {/* Goals */}
+                  {goalsAndSkills.goals.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-medium text-gray-800 mb-3">Goals</h3>
+                      <div className="space-y-2">
+                        {goalsAndSkills.goals.slice(0, 5).map((goal: string, index: number) => (
+                          <div key={index} className="flex items-start space-x-2">
+                            <span className="text-blue-500 mt-1">•</span>
+                            <span className="text-gray-700">{goal}</span>
+                          </div>
+                        ))}
+                        {goalsAndSkills.goals.length > 5 && (
+                          <p className="text-sm text-gray-500">
+                            +{goalsAndSkills.goals.length - 5} more goals
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Skills */}
+                  {goalsAndSkills.skills.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-800 mb-3">Skills</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {goalsAndSkills.skills.slice(0, 10).map((skill: string, index: number) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {goalsAndSkills.skills.length > 10 && (
+                          <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                            +{goalsAndSkills.skills.length - 10} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Add New Post Button */}
               <div className="mt-8 flex justify-center items-center space-x-4">

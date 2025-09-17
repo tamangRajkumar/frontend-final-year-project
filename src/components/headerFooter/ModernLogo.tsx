@@ -1,27 +1,37 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Logo: React.FC<{ size?: number; variant?: 'modern' | 'minimalist' | 'professional' }> = ({ 
+interface ModernLogoProps {
+  size?: number;
+  variant?: 'full' | 'icon' | 'minimal';
+  className?: string;
+}
+
+const ModernLogo: React.FC<ModernLogoProps> = ({ 
   size = 36, 
-  variant = 'modern' 
+  variant = 'full',
+  className = ''
 }) => {
   const brand = '#f26722';
   const brandLight = '#ff8f57';
   
+  const iconSize = variant === 'minimal' ? size * 0.6 : size;
+  
   return (
     <Link href="/">
-      <a className="inline-flex items-center gap-3 group" aria-label="LinkCofounders home">
+      <a className={`inline-flex items-center gap-3 group ${className}`} aria-label="LinkCofounders home">
+        {/* Modern Icon */}
         <div 
           className="relative flex items-center justify-center overflow-hidden" 
           style={{ 
-            width: size, 
-            height: size,
+            width: iconSize, 
+            height: iconSize,
             borderRadius: '12px'
           }}
         >
           <svg 
-            width={size} 
-            height={size} 
+            width={iconSize} 
+            height={iconSize} 
             viewBox="0 0 64 64" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -77,23 +87,41 @@ const Logo: React.FC<{ size?: number; variant?: 'modern' | 'minimalist' | 'profe
           </svg>
         </div>
         
-        <div className="hidden md:block">
-          <div 
-            className="text-xl font-bold text-gray-900 tracking-tight" 
-            style={{ 
-              letterSpacing: '-0.025em',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
-            }}
-          >
-            LinkCofounders
+        {/* Typography - only show for full variant */}
+        {variant === 'full' && (
+          <div className="hidden md:block">
+            <div 
+              className="text-xl font-bold text-gray-900 tracking-tight" 
+              style={{ 
+                letterSpacing: '-0.025em',
+                fontFamily: 'system-ui, -apple-system, sans-serif'
+              }}
+            >
+              LinkCofounders
+            </div>
+            <div 
+              className="text-xs text-gray-500 -mt-1 font-medium tracking-wide"
+              style={{ letterSpacing: '0.05em' }}
+            >
+              CONNECT • BUILD • GROW
+            </div>
           </div>
-          <div 
-            className="text-xs text-gray-500 -mt-1 font-medium tracking-wide"
-            style={{ letterSpacing: '0.05em' }}
-          >
-            CONNECT • BUILD • GROW
+        )}
+        
+        {/* Minimal variant - just icon with subtle text */}
+        {variant === 'minimal' && (
+          <div className="hidden md:block">
+            <div 
+              className="text-lg font-semibold text-gray-800" 
+              style={{ 
+                letterSpacing: '-0.02em',
+                fontFamily: 'system-ui, -apple-system, sans-serif'
+              }}
+            >
+              LinkCofounders
+            </div>
           </div>
-        </div>
+        )}
         
         <style jsx>{`
           .group:hover svg {
@@ -109,4 +137,4 @@ const Logo: React.FC<{ size?: number; variant?: 'modern' | 'minimalist' | 'profe
   );
 };
 
-export default Logo;
+export default ModernLogo;

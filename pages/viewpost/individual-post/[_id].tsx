@@ -25,7 +25,7 @@ const IndividualPost: NextPage = () => {
   // console.log(postId)
 
   const [post, setPost] = useState<any>();
-
+console.log({post})
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
   // Get comments data
@@ -34,6 +34,7 @@ const IndividualPost: NextPage = () => {
 
   // Comments state
   const [addComment, setAddComment] = useState("");
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
   console.log(addComment);
 
@@ -57,10 +58,10 @@ const IndividualPost: NextPage = () => {
       const { data } = await fetchIndividualPost(postId);
       // console.log("Fetch posts called");
 
-      data && console.log(data.comments);
-      setPost(data);
+      data && console.log(data?.data.comments);
+      setPost(data?.data);
       console.log(data);
-      setPostCommentsData(data.comments);
+      setPostCommentsData(data?.data?.comments);
     } catch (error) {
       console.log("Error=> ", error);
     }
@@ -68,20 +69,29 @@ const IndividualPost: NextPage = () => {
 
   // Submit comments
   const handleAddComments = async () => {
-    // console.log("Called");
+    if (!addComment.trim()) {
+      toast.error("Please enter a comment");
+      return;
+    }
+    
+    setIsSubmittingComment(true);
     try {
       const { data } = await postCommentSubmit(addComment, postId, token);
-      if (data.commentPosted == "true") {
-        // console.log(data.updatedPost.comments);
-        // console.log("Called here");
-        console.log(data);
-        setPostCommentsData(data.updatedPost.comments);
+      console.log("Comment submission response:", data);
+      
+      if (data.success) {
+        // Refetch the post to get updated comments
+        await fetchPosts();
         setAddComment("");
         toast.success("Your comment is posted successfully");
+      } else {
+        toast.error(data.message || "Failed to post comment");
       }
-      // console.log(data);
     } catch (error) {
       console.log("Error=> ", error);
+      toast.error("Failed to post comment");
+    } finally {
+      setIsSubmittingComment(false);
     }
   };
 
@@ -104,19 +114,20 @@ const IndividualPost: NextPage = () => {
       );
       if (!answer) return;
       const commentId = commentData._id;
-      // console.log(commentId);
+      
       const { data } = await deletePostComment(postId, commentId, token);
-      console.log(data);
+      console.log("Delete comment response:", data);
+      
       if (data.postCommentDeleted == "true") {
-        //  call comments fresh new
-        setPostCommentsData(data.postComments);
-        console.log(data.postComments);
-
-        // fetchCommentsOnly(); --> alternative
+        // Refetch the post to get updated comments
+        await fetchPosts();
         toast.success("Your comment is deleted successfully");
+      } else {
+        toast.error("Failed to delete comment");
       }
     } catch (error) {
       console.log("Error=> ", error);
+      toast.error("Failed to delete comment");
     }
   };
 
@@ -144,7 +155,7 @@ const IndividualPost: NextPage = () => {
     <>
       {post && (
         <>
-          <div className="grid grid-cols-2  justify-around px-10 pt-5 ">
+          <div className="grid grid-cols-2  justify-around px-10 pt-5 mt-16 ">
             <div className="mx-10 mt-10 ">
               <div className="sticky top-32  ">
                 <Image
@@ -164,7 +175,7 @@ const IndividualPost: NextPage = () => {
                 <div className="flex">
                   {/* Profile Image */}
                   <Image
-                    src={post?.postedBy?.userProfileImage?.url ?? Avatar}
+                    src={post?.postedBy?.userProfileImage?.url || Avatar}
                     alt="Picture of the author"
                     width={50}
                     height={50}

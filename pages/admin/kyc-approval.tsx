@@ -110,7 +110,10 @@ const KYCApproval: NextPage = () => {
         const docType = info.getValue();
         return (
           <span className="capitalize">
-            {docType === 'pan_card' ? 'PAN Card' : docType}
+            {docType === 'pan_card' ? 'PAN Card' : 
+             docType === 'citizenship' ? 'Citizenship Card' :
+             docType === 'passport' ? 'Passport' :
+             docType}
           </span>
         );
       },
@@ -384,7 +387,10 @@ const KYCApproval: NextPage = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Document Type</label>
                         <p className="text-sm text-gray-900 capitalize">
-                          {selectedUser.kycInfo.documentType === 'pan_card' ? 'PAN Card' : selectedUser.kycInfo.documentType}
+                          {selectedUser.kycInfo.documentType === 'pan_card' ? 'PAN Card' : 
+                           selectedUser.kycInfo.documentType === 'citizenship' ? 'Citizenship Card' :
+                           selectedUser.kycInfo.documentType === 'passport' ? 'Passport' :
+                           selectedUser.kycInfo.documentType}
                         </p>
                       </div>
                       <div>

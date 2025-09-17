@@ -17,8 +17,7 @@ import {
   HiUser,
   HiHeart,
   HiChat,
-  HiStar,
-  HiStarSolid
+  HiStar
 } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { getAllPosts, toggleFeaturedProposal } from "../api";
@@ -483,7 +482,7 @@ const ProposalsPage: NextPage = () => {
                               title={proposal.isFeatured ? 'Remove from featured' : 'Add to featured'}
                             >
                               {proposal.isFeatured ? (
-                                <HiStarSolid className="h-4 w-4" />
+                                <HiStar className="h-4 w-4" />
                               ) : (
                                 <HiStar className="h-4 w-4" />
                               )}

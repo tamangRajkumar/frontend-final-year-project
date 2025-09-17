@@ -39,22 +39,6 @@ const Signup: NextPage = () => {
 console.log({errors})
   const onSubmit = async (data: SignupFormData) => {
     try {
-      // Handle file upload for KYC document
-      let kycDocumentImage = { url: "", public_id: "" };
-      if (data.kycDocumentImage && (data.kycDocumentImage as any).length > 0) {
-        const file = (data.kycDocumentImage as any)[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-          const uploadResponse = await uploadImage(formData, '');
-          kycDocumentImage = uploadResponse.data;
-        } catch (uploadError) {
-          console.error('File upload error:', uploadError);
-          toast.error("Failed to upload KYC document. Please try again.");
-          return;
-        }
-      }
-
       const signUpData = {
         fname: data.fname,
         lname: data.lname,
@@ -63,11 +47,6 @@ console.log({errors})
         country: data.country,
         gender: data.gender,
         role: data.role,
-        kycInfo: {
-          documentType: data.kycDocumentType,
-          documentNumber: data.kycDocumentNumber,
-          documentImage: kycDocumentImage,
-        },
         userProfileImage: { url: "", public_key: "" },
         userCoverImage: { url: "", public_key: "" },
         favoritePostsList: [],
@@ -76,7 +55,7 @@ console.log({errors})
       const { data: response } = await signUp(signUpData);
       if (response.ok) {
         router.push("/auth/login");
-        toast.success("Successfully signed up! Your account is pending KYC verification. Please wait for admin approval.");
+        toast.success("Successfully signed up! You can now verify your KYC in settings.");
       }
     } catch (error) {
       console.log(error);
@@ -314,54 +293,6 @@ console.log({errors})
               {errors.role && <p className="text-red-500 text-sm mt-2">{errors.role.message}</p>}
             </div>
 
-            <div className="md:col-span-2">
-              {/* KYC Document Type */}
-              <div className="mt-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Document Type *
-                </label>
-                <select
-                  {...register("kycDocumentType")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select document type</option>
-                  <option value="citizenship">Citizenship Card</option>
-                  <option value="pan_card">PAN Card</option>
-                </select>
-                {errors.kycDocumentType && (
-                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentType.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="md:col-span-2">
-              {/* KYC Document Number */}
-              <div className="mt-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Document Number *
-                </label>
-                <input
-                  {...register("kycDocumentNumber")}
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your document number"
-                />
-                {errors.kycDocumentNumber && (
-                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentNumber.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="md:col-span-2">
-              {/* KYC upload using modern FileUpload component */}
-              <div className="mt-1">
-                <FileUpload accept=".jpg,.jpeg,.png" multiple={false} onFilesChange={(files) => setValue('kycDocumentImage', files as any)} label="KYC Document Image *" />
-                {errors.kycDocumentImage && (
-                  <p className="text-red-500 text-sm mt-1">{errors.kycDocumentImage.message as any}</p>
-                )}
-                <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file</p>
-              </div>
-            </div>
 
             <div className="md:col-span-2">
               <button type="submit" disabled={isSubmitting} className="w-full rounded-xl py-3 font-semibold text-white shadow-lg" style={{ background: 'linear-gradient(135deg,#f26722,#ff8f57)' }}>
