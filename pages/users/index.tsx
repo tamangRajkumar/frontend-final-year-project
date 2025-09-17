@@ -5,20 +5,21 @@ import { useRouter } from "next/router";
 import { 
   HiUsers, 
   HiSearch, 
-  HiFilter, 
   HiChevronLeft, 
   HiChevronRight,
   HiEye,
-  HiCog,
   HiMail,
   HiLocationMarker,
   HiCalendar,
-  HiChat
+  HiChat,
+  HiLightningBolt,
+  HiCode
 } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { getUsersList, updateUserRole, createOrGetChat } from "../api";
 import RoleGuard from "../../src/components/auth/RoleGuard";
 import { getCleanToken, forceTokenCleanup } from "../../src/utils/tokenUtils";
+import Image from "next/image";
 
 const UsersList: NextPage = () => {
   const [users, setUsers] = useState([]);
@@ -91,10 +92,12 @@ const UsersList: NextPage = () => {
     }
   };
 
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setFilters(prev => ({ ...prev, page: 1 }));
   };
+
 
   const handleRoleChange = (userId: string, newRole: string) => {
     const authToken = getCleanToken(token);
@@ -128,6 +131,7 @@ const UsersList: NextPage = () => {
     setFilters(prev => ({ ...prev, page: newPage }));
   };
 
+
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'admin':
@@ -150,7 +154,7 @@ const UsersList: NextPage = () => {
 
   return (
     <RoleGuard allowedRoles={['admin', 'user', 'business']}>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -163,7 +167,7 @@ const UsersList: NextPage = () => {
                 <p className="text-gray-600 mt-2">
                   {currentUser?.role === 'admin' 
                     ? 'Manage all users, roles, and permissions'
-                    : 'Discover and connect with other users'
+                    : 'Discover and connect with users'
                   }
                 </p>
               </div>
@@ -183,6 +187,7 @@ const UsersList: NextPage = () => {
             </div>
           </div>
 
+
           {/* Filters */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
@@ -191,7 +196,7 @@ const UsersList: NextPage = () => {
                   <HiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search by name or email..."
+                    placeholder="Search users by name or email..."
                     value={filters.search}
                     onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -204,9 +209,8 @@ const UsersList: NextPage = () => {
                   onChange={(e) => setFilters(prev => ({ ...prev, role: e.target.value, page: 1 }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="">All Roles</option>
+                  <option value="">Type</option>
                   <option value="user">Users</option>
-                  <option value="business">Businesses</option>
                   <option value="admin">Admins</option>
                 </select>
               </div>
@@ -232,17 +236,21 @@ const UsersList: NextPage = () => {
                   <div className="p-6">
                     {/* User Avatar and Basic Info */}
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
                         {user.userProfileImage?.url ? (
-                          <img
+                          <Image
                             src={user.userProfileImage.url}
                             alt={user.fname}
+                            width={48}
+                            height={48}
                             className="w-12 h-12 rounded-full object-cover"
                           />
                         ) : (
-                          <span className="text-gray-600 font-semibold text-lg">
-                            {user.fname?.charAt(0)}{user.lname?.charAt(0)}
-                          </span>
+                          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <span className="text-white font-semibold text-lg">
+                              {user.fname?.charAt(0)}{user.lname?.charAt(0)}
+                            </span>
+                          </div>
                         )}
                       </div>
                       <div className="ml-4 flex-1">
@@ -271,24 +279,58 @@ const UsersList: NextPage = () => {
                       </div>
                     </div>
 
-                    {/* Business Info (if applicable) */}
-                    {user.role === 'business' && user.businessInfo && (
-                      <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                        <h4 className="font-medium text-blue-900 mb-1">
-                          {user.businessInfo.businessName}
-                        </h4>
-                        <p className="text-sm text-blue-700">
-                          {user.businessInfo.businessType}
-                        </p>
-                        <div className="flex items-center mt-2">
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            user.businessInfo.isVerified 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {user.businessInfo.isVerified ? 'Verified' : 'Pending Verification'}
-                          </span>
-                        </div>
+                    {/* Goals and Skills */}
+                    {(user.goals?.length > 0 || user.skills?.length > 0) && (
+                      <div className="mb-4 space-y-3">
+                        {/* Goals */}
+                        {user.goals?.length > 0 && (
+                          <div>
+                            <div className="flex items-center mb-2">
+                              <HiLightningBolt className="h-4 w-4 mr-2 text-yellow-500" />
+                              <span className="text-sm font-medium text-gray-700">Goals</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {user.goals.slice(0, 3).map((goal: string, index: number) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full"
+                                >
+                                  {goal}
+                                </span>
+                              ))}
+                              {user.goals.length > 3 && (
+                                <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                                  +{user.goals.length - 3} more
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Skills */}
+                        {user.skills?.length > 0 && (
+                          <div>
+                            <div className="flex items-center mb-2">
+                              <HiCode className="h-4 w-4 mr-2 text-blue-500" />
+                              <span className="text-sm font-medium text-gray-700">Skills</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {user.skills.slice(0, 3).map((skill: string, index: number) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                              {user.skills.length > 3 && (
+                                <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                                  +{user.skills.length - 3} more
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
 

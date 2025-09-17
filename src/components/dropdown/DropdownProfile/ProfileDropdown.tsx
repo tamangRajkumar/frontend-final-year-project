@@ -9,7 +9,7 @@ const ProfileDropdown = ({ showProfileDropdown, onClose, dropdownRef }: any) => 
   
   //check whether the user is logged in or not if logged in and isAuthenticated is true
   const authUser = useSelector((state: any) => state.authUser.isAuthenticated);
-
+  const currentUser = useSelector((state: any) => state.authUser.currentUser);
 
   //dropdown Datas For not logged in user
   const ProfileDropdownDataNotLoggedIn = [
@@ -23,17 +23,43 @@ const ProfileDropdown = ({ showProfileDropdown, onClose, dropdownRef }: any) => 
     },
   ];
 
-  // dropdown datas for logged in users
-  const ProfileDropdownDataLoggedIn = [
-    {
-      name: "Your Profile",
-      link: "/dashboard/user",
-    },
-    {
-      name: "Setting",
-      link: "/setting/profile_setting",
-    },
-  ];
+  // Get role-based profile data
+  const getProfileDropdownData = () => {
+    const baseData = [
+      {
+        name: "Setting",
+        link: "/setting/profile_setting",
+      },
+    ];
+
+    if (currentUser?.role === 'admin') {
+      return [
+        {
+          name: "Admin Dashboard",
+          link: "/dashboard/admin",
+        },
+        ...baseData,
+      ];
+    } else if (currentUser?.role === 'business') {
+      return [
+        {
+          name: "Business Dashboard",
+          link: "/dashboard/business",
+        },
+        ...baseData,
+      ];
+    } else {
+      return [
+        {
+          name: "Your Profile",
+          link: "/dashboard/user",
+        },
+        ...baseData,
+      ];
+    }
+  };
+
+  const ProfileDropdownDataLoggedIn = getProfileDropdownData();
 
 
   const router = useRouter();
@@ -85,7 +111,7 @@ s
     */}
           <div
             ref={dropdownRef}
-            className="dropDownMenu absolute right-0 bottom-[-7rem] z-50 mt-2 w-56 origin-top-right rounded-xl bg-white/70 backdrop-blur-sm border border-gray-200 py-1 shadow-lg focus:outline-none transform transition-all duration-150 ease-out"
+            className="dropDownMenu absolute right-0 bottom-[-7rem] z-50 mt-2 w-56 origin-top-right rounded-xl bg-white border border-gray-200 py-1 shadow-lg focus:outline-none transform transition-all duration-150 ease-out"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu-button"
@@ -110,6 +136,8 @@ s
                       >
                         <span>{data.name}</span>
                         {data.name === 'Your Profile' && <span className="text-xs text-gray-500">Profile</span>}
+                        {data.name === 'Admin Dashboard' && <span className="text-xs text-gray-500">Admin</span>}
+                        {data.name === 'Business Dashboard' && <span className="text-xs text-gray-500">Business</span>}
                       </a>
                     </Link>
                   </div>

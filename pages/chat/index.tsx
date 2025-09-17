@@ -355,7 +355,7 @@ const ChatPage: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 mt-16">
       <div className="flex h-screen">
         {/* Chat List Sidebar */}
         <div className={`${showMobileChat ? 'hidden md:flex' : 'flex'} flex-col w-full md:w-1/3 lg:w-1/4 bg-white border-r border-gray-200`}>
@@ -517,7 +517,7 @@ const ChatPage: NextPage = () => {
                         isOnline={isUserOnline(getOtherParticipant(selectedChat)?._id)}
                       />
                       
-                      <div>
+                      {/* <div>
                         <h2 className="font-semibold text-gray-900">
                           {(() => {
                             const otherParticipant = getOtherParticipant(selectedChat);
@@ -528,7 +528,7 @@ const ChatPage: NextPage = () => {
                         <p className="text-sm text-gray-500">
                           {isConnected ? "Online" : "Offline"}
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 

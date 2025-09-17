@@ -140,8 +140,12 @@ const Navbar: NextPage = () => {
       link: "/events",
     },
     {
-      name: "Users",
+      name: "User",
       link: "/users",
+    },
+    {
+      name: "Business",
+      link: "/businesses",
     },
     {
       name: "Chat",
@@ -206,7 +210,7 @@ const Navbar: NextPage = () => {
               </div>
 
               {/* Mobile Search */}
-              {authUser && (
+              {/* {authUser && (
                 <div className="flex-1 max-w-xs mx-4 sm:hidden">
                   <form onSubmit={handleSearch} className="relative">
                     <input
@@ -221,7 +225,7 @@ const Navbar: NextPage = () => {
                     </button>
                   </form>
                 </div>
-              )}
+              )} */}
 
               {/* Web View Nav Links: only show when authenticated */}
               {authUser ? (
@@ -248,7 +252,7 @@ const Navbar: NextPage = () => {
                     ))}
 
                     {/* Search */}
-                    <div className="ml-3 flex items-center">
+                    {/* <div className="ml-3 flex items-center">
                       <form onSubmit={handleSearch} className="relative">
                         <input
                           type="text"
@@ -261,7 +265,7 @@ const Navbar: NextPage = () => {
                           <HiSearch className="h-5 w-5" />
                         </button>
                       </form>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ) : null }
