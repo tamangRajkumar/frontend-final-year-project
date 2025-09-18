@@ -17,7 +17,7 @@ import {
   HiStar,
 } from "react-icons/hi";
 import { toast } from "react-toastify";
-import { getAllEvents } from "../api/index";
+import { getAllEvents, toggleFeaturedEvent } from "../api/index";
 
 interface Event {
   _id: string;
@@ -63,6 +63,7 @@ interface Event {
   registeredUsers: any[];
   likes: any[];
   comments: any[];
+  isFeatured?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -154,28 +155,15 @@ const EventsPage: NextPage = () => {
     setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
-  const handleToggleFeatured = async (eventId: string, isCurrentlyFeatured: boolean) => {
+  const handleToggleFeatured = async (eventId: string, currentFeaturedStatus: boolean) => {
     try {
-      // Make API call directly
-      const response = await fetch(`/api/event/${eventId}/featured`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ isFeatured: !isCurrentlyFeatured })
-      });
-      
-      const data = await response.json();
-      
+      const { data } = await toggleFeaturedEvent(eventId, !currentFeaturedStatus, token);
       if (data.success) {
         toast.success(data.message);
-        fetchEvents(); // Refresh the events list
-      } else {
-        toast.error(data.message || "Failed to toggle featured status");
+        fetchEvents();
       }
     } catch (error) {
-      console.error("Error toggling featured status:", error);
+      console.error("Error toggling featured event:", error);
       toast.error("Failed to toggle featured status");
     }
   };
@@ -366,11 +354,11 @@ const EventsPage: NextPage = () => {
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getEventTypeColor(event.eventType)}`}>
                           {event.eventType}
                         </span>
-                        {/* {event?.isFeatured && (
+                        {event?.isFeatured && (
                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                             ⭐ Featured
                           </span>
-                        )} */}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -484,7 +472,7 @@ const EventsPage: NextPage = () => {
                         )}
                         {currentUser?.role === 'admin' && (
                           <button
-                            onClick={() => handleToggleFeatured(event._id, event?.isFeatured)}
+                            onClick={() => handleToggleFeatured(event._id, event.isFeatured || false)}
                             className={`p-2 rounded-full transition-colors ${
                               event?.isFeatured 
                                 ? 'text-yellow-500 hover:text-yellow-600 bg-yellow-50 hover:bg-yellow-100' 
@@ -492,11 +480,7 @@ const EventsPage: NextPage = () => {
                             }`}
                             title={event?.isFeatured ? 'Remove from featured' : 'Add to featured'}
                           >
-                            {event?.isFeatured ? (
-                              <HiStar className="h-5 w-5" />
-                            ) : (
-                              <HiStar className="h-5 w-5" />
-                            )}
+                            <HiStar className={`h-5 w-5 ${event?.isFeatured ? 'fill-current' : ''}`} />
                           </button>
                         )}
                       </div>

@@ -334,7 +334,6 @@ const Business: NextPage = () => {
                   className="flex justify-center items-center cursor-pointer"
                   onClick={handlePostModal}
                 >
-                  x
                   <input
                     type="text"
                     className="bg-white shadow-md cursor-pointer focus:outline-none rounded-2xl pl-5 py-1.5 text-gray-900 font-base"

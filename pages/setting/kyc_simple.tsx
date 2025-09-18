@@ -182,3 +182,4 @@ const KYCSimple: NextPage = () => {
 };
 
 export default KYCSimple;
+

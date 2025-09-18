@@ -15,3 +15,4 @@ const KYCTest: NextPage = () => {
 };
 
 export default KYCTest;
+

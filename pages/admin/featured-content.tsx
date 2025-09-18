@@ -67,13 +67,13 @@ const FeaturedContentPage: NextPage = () => {
     }
   };
 
-  const handleToggleFeatured = async (type: 'proposal' | 'event', id: string) => {
+  const handleToggleFeatured = async (type: 'proposal' | 'event', id: string, currentStatus: boolean) => {
     try {
       let response;
       if (type === 'proposal') {
-        response = await toggleFeaturedProposal(id, false, token);
+        response = await toggleFeaturedProposal(id, !currentStatus, token);
       } else {
-        response = await toggleFeaturedEvent(id, false, token);
+        response = await toggleFeaturedEvent(id, !currentStatus, token);
       }
       
       if (response.data.success) {
@@ -213,7 +213,7 @@ const FeaturedContentPage: NextPage = () => {
                             </div>
                           </div>
                           <button
-                            onClick={() => handleToggleFeatured('proposal', proposal._id)}
+                            onClick={() => handleToggleFeatured('proposal', proposal._id, true)}
                             className="p-1 text-yellow-500 hover:text-yellow-600 transition-colors"
                             title="Remove from featured"
                           >
@@ -307,7 +307,7 @@ const FeaturedContentPage: NextPage = () => {
                             </div>
                           </div>
                           <button
-                            onClick={() => handleToggleFeatured('event', event._id)}
+                            onClick={() => handleToggleFeatured('event', event._id, true)}
                             className="p-1 text-yellow-500 hover:text-yellow-600 transition-colors"
                             title="Remove from featured"
                           >

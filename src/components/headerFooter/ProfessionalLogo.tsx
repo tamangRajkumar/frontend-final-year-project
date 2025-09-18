@@ -144,3 +144,5 @@ const ProfessionalLogo: React.FC<ProfessionalLogoProps> = ({
 };
 
 export default ProfessionalLogo;
+
+

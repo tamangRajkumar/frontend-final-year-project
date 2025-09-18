@@ -288,3 +288,5 @@ const AvatarDemo: NextPage = () => {
 };
 
 export default AvatarDemo;
+
+

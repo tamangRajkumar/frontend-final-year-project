@@ -118,3 +118,5 @@ const MinimalistLogo: React.FC<MinimalistLogoProps> = ({
 };
 
 export default MinimalistLogo;
+
+

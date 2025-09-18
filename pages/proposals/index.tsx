@@ -71,6 +71,7 @@ interface BusinessProposal {
   likes: any[];
   comments: any[];
   tags: string[];
+  isFeatured?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -152,9 +153,9 @@ const ProposalsPage: NextPage = () => {
     setPagination(prev => ({ ...prev, currentPage: newPage }));
   };
 
-  const handleToggleFeatured = async (proposalId: string) => {
+  const handleToggleFeatured = async (proposalId: string, currentFeaturedStatus: boolean) => {
     try {
-      const { data } = await toggleFeaturedProposal(proposalId, token);
+      const { data } = await toggleFeaturedProposal(proposalId, !currentFeaturedStatus, token);
       if (data.success) {
         toast.success(data.message);
         fetchProposals();
@@ -480,7 +481,7 @@ const ProposalsPage: NextPage = () => {
                           </button>
                           {currentUser?.role === 'admin' && (
                             <button
-                              onClick={() => handleToggleFeatured(proposal._id)}
+                              onClick={() => handleToggleFeatured(proposal._id, proposal.isFeatured)}
                               className={`p-1 rounded transition-colors ${
                                 proposal.isFeatured 
                                   ? 'text-yellow-500 hover:text-yellow-600' 
@@ -488,11 +489,7 @@ const ProposalsPage: NextPage = () => {
                               }`}
                               title={proposal.isFeatured ? 'Remove from featured' : 'Add to featured'}
                             >
-                              {proposal.isFeatured ? (
-                                <HiStar className="h-4 w-4" />
-                              ) : (
-                                <HiStar className="h-4 w-4" />
-                              )}
+                              <HiStar className={`h-4 w-4 ${proposal.isFeatured ? 'fill-current' : ''}`} />
                             </button>
                           )}
                           {currentUser && (
