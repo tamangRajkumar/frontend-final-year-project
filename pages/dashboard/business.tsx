@@ -27,6 +27,9 @@ import {
   postUnliked,
   getPostsByUser,
   getEventsByOrganizer,
+  publishEvent,
+  unpublishEvent,
+  deleteEvent,
 } from "../api";
 import { toast } from "react-toastify";
 
@@ -46,6 +49,11 @@ const Business: NextPage = () => {
   const [businessEvents, setBusinessEvents] = useState([]);
   const [activeTab, setActiveTab] = useState("proposals"); // 'posts', 'proposals', or 'events'
   const [createEventModal, setCreateEventModal] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showUnpublishModal, setShowUnpublishModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const router = useRouter();
 
@@ -180,6 +188,81 @@ const Business: NextPage = () => {
     } catch (error) {
       // console.log("Error => ", error);
     }
+  };
+
+  // Handle publish event
+  const handlePublishEvent = async () => {
+    try {
+      setIsProcessing(true);
+      const response = await publishEvent(selectedEvent._id, token);
+      if (response.data.success) {
+        toast.success("Event published successfully!");
+        getBusinessEvents(); // Refresh events list
+        setShowPublishModal(false);
+        setSelectedEvent(null);
+      }
+    } catch (error) {
+      console.error("Error publishing event:", error);
+      toast.error("Failed to publish event");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Handle unpublish event
+  const handleUnpublishEvent = async () => {
+    try {
+      setIsProcessing(true);
+      const response = await unpublishEvent(selectedEvent._id, token);
+      if (response.data.success) {
+        toast.success("Event unpublished successfully!");
+        getBusinessEvents(); // Refresh events list
+        setShowUnpublishModal(false);
+        setSelectedEvent(null);
+      }
+    } catch (error) {
+      console.error("Error unpublishing event:", error);
+      toast.error("Failed to unpublish event");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Handle delete event
+  const handleDeleteEvent = async () => {
+    try {
+      setIsProcessing(true);
+      const response = await deleteEvent(selectedEvent._id, token);
+      if (response.data.success) {
+        toast.success("Event deleted successfully!");
+        getBusinessEvents(); // Refresh events list
+        setShowDeleteModal(false);
+        setSelectedEvent(null);
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      toast.error("Failed to delete event");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Show publish confirmation modal
+  const showPublishConfirmation = (event: any) => {
+    setSelectedEvent(event);
+    setShowPublishModal(true);
+  };
+
+  // Show unpublish confirmation modal
+  const showUnpublishConfirmation = (event: any) => {
+    setSelectedEvent(event);
+    setShowUnpublishModal(true);
+  };
+
+  // Show delete confirmation modal
+  const showDeleteConfirmation = (event: any) => {
+    setSelectedEvent(event);
+    setShowDeleteModal(true);
   };
 
   return (
@@ -777,32 +860,55 @@ const Business: NextPage = () => {
                                 </button>
                               </div>
 
-                              <div className="grid grid-cols-2 gap-2 mt-2">
+                              <div className="grid grid-cols-3 gap-2 mt-2">
                                 <button
                                   onClick={() =>
                                     router.push(
                                       `/dashboard/business/events/${event._id}/registrations`
                                     )
                                   }
-                                  className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-sm"
+                                  className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center space-x-1 text-xs"
                                 >
-                                  <HiUserGroup className="h-4 w-4" />
+                                  <HiUserGroup className="h-3 w-3" />
                                   <span>Registrations</span>
                                 </button>
+                                
+                                {/* Publish/Unpublish Button */}
+                                {!event.isPublished ? (
+                                  <button
+                                    onClick={() => showPublishConfirmation(event)}
+                                    className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-xl font-semibold transition-all duration-200 text-xs"
+                                  >
+                                    Publish
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => showUnpublishConfirmation(event)}
+                                    className="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-xl font-semibold transition-all duration-200 text-xs"
+                                  >
+                                    Unpublish
+                                  </button>
+                                )}
+                                
                                 <button
-                                  onClick={() => {
-                                    if (
-                                      confirm(
-                                        "Are you sure you want to delete this event?"
-                                      )
-                                    ) {
-                                      // Handle delete
-                                    }
-                                  }}
-                                  className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-xl font-semibold transition-all duration-200 text-sm"
+                                  onClick={() => showDeleteConfirmation(event)}
+                                  className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-xl font-semibold transition-all duration-200 text-xs"
                                 >
                                   Delete
                                 </button>
+                              </div>
+
+                              {/* Event Status Badge */}
+                              <div className="mt-3 flex justify-center">
+                                {event.isPublished ? (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    ✓ Published
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Draft
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -813,6 +919,102 @@ const Business: NextPage = () => {
               )}
             </div>
           </div>
+
+          {/* Publish Confirmation Modal */}
+          {showPublishModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Publish Event
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to publish "{selectedEvent?.title}"? Once published, users will be able to register for this event.
+                </p>
+                <div className="flex space-x-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowPublishModal(false);
+                      setSelectedEvent(null);
+                    }}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handlePublishEvent}
+                    disabled={isProcessing}
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                  >
+                    {isProcessing ? 'Publishing...' : 'Yes, Publish'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Unpublish Confirmation Modal */}
+          {showUnpublishModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Unpublish Event
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to unpublish "{selectedEvent?.title}"? This will stop new registrations and users will no longer be able to register for this event.
+                </p>
+                <div className="flex space-x-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowUnpublishModal(false);
+                      setSelectedEvent(null);
+                    }}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleUnpublishEvent}
+                    disabled={isProcessing}
+                    className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
+                  >
+                    {isProcessing ? 'Unpublishing...' : 'Yes, Unpublish'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Delete Event
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to delete "{selectedEvent?.title}"? This action cannot be undone and all event data will be permanently removed.
+                </p>
+                <div className="flex space-x-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setSelectedEvent(null);
+                    }}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteEvent}
+                    disabled={isProcessing}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                  >
+                    {isProcessing ? 'Deleting...' : 'Yes, Delete'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </>

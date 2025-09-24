@@ -675,3 +675,20 @@ export const getFeaturedPosts = async (token: string) => {
     },
   });
 };
+
+// Event publish/unpublish functions
+export const publishEvent = (eventId: string, token: string) => {
+  return axios.put(`/event/${eventId}/publish`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const unpublishEvent = (eventId: string, token: string) => {
+  return axios.put(`/event/${eventId}/unpublish`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

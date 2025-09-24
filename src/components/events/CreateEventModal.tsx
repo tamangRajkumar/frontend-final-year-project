@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { HiX, HiPlus, HiTrash, HiCalendar, HiClock, HiLocationMarker, HiUsers, HiCurrencyDollar } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { eventSchema, EventFormData } from "../../validation/schemas";
-import { createEvent, uploadImage } from "../../../pages/api";
+import { createEvent, uploadImage, publishEvent } from "../../../pages/api";
 
 interface CreateEventModalProps {
   isOpen: boolean;
@@ -22,6 +22,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [requirements, setRequirements] = useState<string[]>([]);
   const [benefits, setBenefits] = useState<string[]>([]);
+  const [publishOption, setPublishOption] = useState<'draft' | 'publish'>('draft');
   const token = useSelector((state: any) => state.authUser.token);
   const [newTag, setNewTag] = useState("");
   const [newRequirement, setNewRequirement] = useState("");
@@ -79,7 +80,18 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
       const response = await createEvent(eventData, token);
       
       if (response.data.success) {
-        toast.success("Event created successfully!");
+        // If user chose to publish immediately, publish the event
+        if (publishOption === 'publish') {
+          try {
+            await publishEvent(response.data.data._id, token);
+            toast.success("Event created and published successfully!");
+          } catch (publishError) {
+            console.error("Error publishing event:", publishError);
+            toast.success("Event created successfully, but failed to publish. You can publish it later from the event details page.");
+          }
+        } else {
+          toast.success("Event created successfully as draft!");
+        }
         onEventCreated();
         handleClose();
       }
@@ -99,6 +111,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
     setNewTag("");
     setNewRequirement("");
     setNewBenefit("");
+    setPublishOption('draft');
     onClose();
   };
 
@@ -536,6 +549,57 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
               <p className="text-xs text-gray-500 mt-1">Upload JPG or PNG file (optional)</p>
             </div>
 
+            {/* Publish Options */}
+            <div className="border-t pt-6">
+              <h4 className="text-lg font-medium text-gray-900 mb-4">Publication Settings</h4>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="draft-option"
+                      type="radio"
+                      name="publishOption"
+                      value="draft"
+                      checked={publishOption === 'draft'}
+                      onChange={(e) => setPublishOption(e.target.value as 'draft' | 'publish')}
+                      className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="draft-option" className="font-medium text-gray-700">
+                      Save as Draft
+                    </label>
+                    <p className="text-gray-500">
+                      Create the event but don't publish it yet. You can publish it later from the event details page.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="publish-option"
+                      type="radio"
+                      name="publishOption"
+                      value="publish"
+                      checked={publishOption === 'publish'}
+                      onChange={(e) => setPublishOption(e.target.value as 'draft' | 'publish')}
+                      className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="publish-option" className="font-medium text-gray-700">
+                      Publish Immediately
+                    </label>
+                    <p className="text-gray-500">
+                      Create and publish the event right away. Users will be able to register for this event immediately.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Submit Buttons */}
             <div className="flex justify-end space-x-3 pt-6 border-t">
               <button
@@ -554,10 +618,14 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
                 {isSubmitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>Creating...</span>
+                    <span>
+                      {publishOption === 'publish' ? 'Creating & Publishing...' : 'Creating...'}
+                    </span>
                   </>
                 ) : (
-                  <span>Create Event</span>
+                  <span>
+                    {publishOption === 'publish' ? 'Create & Publish Event' : 'Create Event as Draft'}
+                  </span>
                 )}
               </button>
             </div>
